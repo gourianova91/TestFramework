@@ -1,22 +1,40 @@
 ﻿using System;
+using System.Threading;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 
 namespace TestFramework
 {
     public class Driver
     {
+        private IWebDriver _driver = null;
         private static readonly Lazy<Driver> lazy =
         new Lazy<Driver>(() => new Driver());
+        public IWebDriver CurrentDriver { get => startDriver(); }
+        public readonly string ChromeDriverLocation = @"\..\..\Resources";
 
-        public string Name { get; private set; }
-
-        private Driver()
+        public static Driver Instance
         {
-            Name = System.Guid.NewGuid().ToString();
+            get
+            {
+                return lazy.Value;
+            }
         }
 
-        public static Driver GetDriver()
+        protected IWebDriver startDriver()
         {
-            return lazy.Value;
+            IWebDriver webDriver;
+            webDriver = new ChromeDriver(Driver.Instance.ChromeDriverLocation);
+            return webDriver;
+        }
+
+        protected void stopDriver()
+        {
+            if (_driver != null)
+            {
+                CurrentDriver.Quit();
+                _driver = null;
+            }
         }
     } 
 }
