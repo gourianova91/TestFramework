@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Threading;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
 
 namespace TestFramework.Core.WebDriver
 {
@@ -7,7 +13,7 @@ namespace TestFramework.Core.WebDriver
         private static readonly Lazy<WebDriver> lazy =
         new Lazy<WebDriver>(() => GetDriver());
 
-        public static WebDriver Driver
+        public static Driver Instance
         {
             get
             {
@@ -15,29 +21,70 @@ namespace TestFramework.Core.WebDriver
             }
         }
 
-        private static WebDriver GetDriver()
+        private IWebDriver _driver = null;
+        public IWebDriver CurrentBrowser { get => GetDriver(); }
+        private static readonly object ThreadLock = new object();
+
+        //public readonly string ChromeDriverLocation = @"\..\..\Resources";
+
+        public IWebDriver GetDriver()
         {
-            return lazy.Value;
+            lock (ThreadLock)
+            {
+                if (_driver == null)
+                {
+                    _driver = startBrowser();
+                }
+                return _driver;
+            }
+
         }
 
-        public static void StartBrowser(BrowserTypes browserType = BrowserTypes.Chrome, int defaultTimeOut = 30)
+        // Converted to private method because it can't set `_driver`
+        // which is used to close WebDriver (see stopBrowser).
+        private IWebDriver startBrowser(BrowserType browser = BrowserType.Chrome)
         {
-            switch(browserType)
+            IWebDriver driver;
+            switch (browser)
             {
-                case BrowserTypes.Chrome:
-                    WebDriver.GetDriver();
-                    break;
-                case BrowserTypes.Firefox:
-                    WebDriver.GetDriver();
-                    break;
+                case BrowserType.Chrome:
+                    {
+                        driver = new ChromeDriver();
+                        break;
+                    }
+                case BrowserType.Firefox:
+                    {
+                        driver = new FirefoxDriver();
+                        break;
+                    }
+                case BrowserType.IE:
+                    {
+                        driver = new InternetExplorerDriver();
+                        break;
+                    }
                 default:
-                    break;
+                    {
+                        driver = new ChromeDriver();
+                        break;
+                    }
+            }
+            return driver;
+        }
+
+        public void stopBrowser()
+        {
+            if (_driver != null)
+            {
+                CurrentBrowser.Quit();
+                _driver = null;
             }
         }
-    }
-    public enum BrowserTypes
-    {
-        Firefox,
-        Chrome
+
+        public enum BrowserType
+        {
+            Chrome,
+            Firefox,
+            IE
+        }
     }
 }
