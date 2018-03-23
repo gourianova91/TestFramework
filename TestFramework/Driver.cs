@@ -5,13 +5,15 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
+using System.IO;
+using System.Reflection;
 
-namespace TestFramework.Core.WebDriver
+namespace TestFramework
 {
-    public class WebDriver
+    public class Driver
     {
-        private static readonly Lazy<WebDriver> lazy =
-        new Lazy<WebDriver>(() => GetDriver());
+        private static readonly Lazy<Driver> lazy =
+        new Lazy<Driver>(() => new Driver());
 
         public static Driver Instance
         {
@@ -25,23 +27,31 @@ namespace TestFramework.Core.WebDriver
         public IWebDriver CurrentBrowser { get => GetDriver(); }
         private static readonly object ThreadLock = new object();
 
-        //public readonly string ChromeDriverLocation = @"\..\..\Resources";
+        public static string OutputDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static string DriverLocation = @"..\..\Debug\drivers";
+        public static string FullPathDriverLocation = Path.GetFullPath(Path.Combine(OutputDirectory, DriverLocation));
 
-        public IWebDriver GetDriver()
+        protected ChromeOptions ChromeBrowserOptions()
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("start-maximized");
+            return options;
+        }
+        
+
+        public IWebDriver GetDriver(BrowserType browser = BrowserType.Chrome)
         {
             lock (ThreadLock)
             {
                 if (_driver == null)
                 {
-                    _driver = startBrowser();
+                    _driver = startBrowser(browser);
                 }
                 return _driver;
             }
 
         }
 
-        // Converted to private method because it can't set `_driver`
-        // which is used to close WebDriver (see stopBrowser).
         private IWebDriver startBrowser(BrowserType browser = BrowserType.Chrome)
         {
             IWebDriver driver;
@@ -49,22 +59,25 @@ namespace TestFramework.Core.WebDriver
             {
                 case BrowserType.Chrome:
                     {
-                        driver = new ChromeDriver();
+                        driver = new ChromeDriver(FullPathDriverLocation, ChromeBrowserOptions());
                         break;
                     }
                 case BrowserType.Firefox:
                     {
-                        driver = new FirefoxDriver();
+                        FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(FullPathDriverLocation);
+                        service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
+                        driver = new FirefoxDriver(service);
                         break;
                     }
                 case BrowserType.IE:
                     {
-                        driver = new InternetExplorerDriver();
+                        driver = new InternetExplorerDriver(FullPathDriverLocation);
+                        driver.Manage().Window.Maximize();
                         break;
                     }
                 default:
                     {
-                        driver = new ChromeDriver();
+                        driver = new ChromeDriver(FullPathDriverLocation, ChromeBrowserOptions());
                         break;
                     }
             }
@@ -75,6 +88,7 @@ namespace TestFramework.Core.WebDriver
         {
             if (_driver != null)
             {
+                CurrentBrowser.Close();
                 CurrentBrowser.Quit();
                 _driver = null;
             }
