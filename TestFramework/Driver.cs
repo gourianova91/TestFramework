@@ -1,22 +1,43 @@
 ﻿using System;
 
-namespace TestFramework
+namespace TestFramework.Core.WebDriver
 {
-    public class Driver
+    public class WebDriver
     {
-        private static readonly Lazy<Driver> lazy =
-        new Lazy<Driver>(() => new Driver());
+        private static readonly Lazy<WebDriver> lazy =
+        new Lazy<WebDriver>(() => GetDriver());
 
-        public string Name { get; private set; }
-
-        private Driver()
+        public static WebDriver Driver
         {
-            Name = System.Guid.NewGuid().ToString();
+            get
+            {
+                return lazy.Value;
+            }
         }
 
-        public static Driver GetDriver()
+        private static WebDriver GetDriver()
         {
             return lazy.Value;
         }
-    } 
+
+        public static void StartBrowser(BrowserTypes browserType = BrowserTypes.Chrome, int defaultTimeOut = 30)
+        {
+            switch(browserType)
+            {
+                case BrowserTypes.Chrome:
+                    WebDriver.GetDriver();
+                    break;
+                case BrowserTypes.Firefox:
+                    WebDriver.GetDriver();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    public enum BrowserTypes
+    {
+        Firefox,
+        Chrome
+    }
 }
