@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using System.Threading;
-
+using OpenQA.Selenium;
 
 namespace TestFramework
 {
-    class BaseTest
+    public class BaseTest
     {
-        public static string url = "http://www.bbc.com/";
+        public Driver.BrowserType browser;
+        public IWebDriver driver;
+
+        protected static string url = "http://www.bbc.com/";
+        protected static string text = "Sherlock";
+
+        [SetUp]
+        public void startTest()
+        {
+            driver = Driver.Instance.getWebDriver(browser);
+        }
 
         [TearDown]
         public void endTest()
@@ -18,54 +28,30 @@ namespace TestFramework
         }
     }
 
-    [TestFixture]
-    class TestInChrome : BaseTest
+    [Parallelizable]
+    [TestFixture(Driver.BrowserType.Chrome)]
+    [TestFixture(Driver.BrowserType.Firefox)]
+    //[TestFixture(Driver.BrowserType.IE)]
+    public class Test : BaseTest
     {
-        [SetUp]
-        public void startTest()
+        public Test(Driver.BrowserType browser)
         {
-            Driver.Instance.GetDriver(Driver.BrowserType.Chrome);
+            this.browser = browser;
         }
 
         [Test]
-        public void testInChrome()
+        public void test()
         {
-            BBCPage bbc = new BBCPage();
-            bbc.navigateTo(url);
-        }
-    }
-
-    [TestFixture]
-    class TestInFirefox : BaseTest
-    {
-        [SetUp]
-        public void startTest()
-        {
-            Driver.Instance.GetDriver(Driver.BrowserType.Firefox);
-        }
-
-        [Test]
-        public void testInFirefox()
-        {
-            BBCPage bbc = new BBCPage();
-            bbc.navigateTo(url);
-        }
-    }
-
-    [TestFixture]
-    class TestInIE : BaseTest
-    {
-        [SetUp]
-        public void startTest()
-        {
-            Driver.Instance.GetDriver(Driver.BrowserType.IE);
-        }
-
-        [Test]
-        public void testInIE()
-        {
-            BBCPage bbc = new BBCPage();
-            bbc.navigateTo(url);
+            //BBCPage bbc = new BBCPage();
+            //bbc.navigateToChrome(url);
+            driver.Navigate().GoToUrl(url);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.FindElement(BBCPage.search).Clear();
+            driver.FindElement(BBCPage.search).SendKeys(text);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.FindElement(BBCPage.searchButton).Click();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.FindElement(BBCPage.firstLink).Click();
         }
     }
 }
