@@ -7,10 +7,15 @@ namespace TestFramework
 {
     class BasePage
     {
+        protected IWebDriver driver;
+        public BasePage()
+        {
+            driver = Driver.Instance.getWebDriver();
+        }
         public void navigateTo(string url)
         {
-            //Driver.Instance.getWebDriver(BaseTest.).Navigate().GoToUrl(url);
-            //Driver.Instance.getWebDriver(Driver.BrowserType.Chrome).Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Navigate().GoToUrl(url);
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }
     }
 

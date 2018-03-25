@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
@@ -11,6 +12,11 @@ namespace TestFramework
     {
         public Driver.BrowserType browser;
         public IWebDriver driver;
+        public IWebElement webElement;
+        public double waitImplicit = 10;
+
+        //Explicit wait
+        //public WebDriverWait waitExplicit = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
         protected static string url = "http://www.bbc.com/";
         protected static string text = "Sherlock";
@@ -42,15 +48,18 @@ namespace TestFramework
         [Test]
         public void test()
         {
-            //BBCPage bbc = new BBCPage();
-            //bbc.navigateToChrome(url);
-            driver.Navigate().GoToUrl(url);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            BBCPage bbc = new BBCPage();
+            bbc.navigateTo(url);
+            //driver.Navigate().GoToUrl(url);
+            //Implicit wait
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
+            //Explicit wait
+            //webElement = waitExplicit.Until<IWebElement>(driver => driver.FindElement(BBCPage.search));
             driver.FindElement(BBCPage.search).Clear();
             driver.FindElement(BBCPage.search).SendKeys(text);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
             driver.FindElement(BBCPage.searchButton).Click();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            ///driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
             driver.FindElement(BBCPage.firstLink).Click();
         }
     }
