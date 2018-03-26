@@ -13,10 +13,10 @@ namespace TestFramework
         public Driver.BrowserType browser;
         public IWebDriver driver;
         public IWebElement webElement;
-        public double waitImplicit = 10;
+        public static bool enable = false;
+        public double WAIT_IMPLICIT = 15;
+        public WebDriverWait waitExplicit;
 
-        //Explicit wait
-        //public WebDriverWait waitExplicit = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
         protected static string url = "http://www.bbc.com/";
         protected static string text = "Sherlock";
@@ -25,7 +25,11 @@ namespace TestFramework
         public void startTest()
         {
             driver = Driver.Instance.getWebDriver(browser);
-        }
+            //Implicit wait
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(WAIT_IMPLICIT);
+            //Explicit wait
+            waitExplicit = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+    }
 
         [TearDown]
         public void endTest()
@@ -50,16 +54,13 @@ namespace TestFramework
         {
             BBCPage bbc = new BBCPage();
             bbc.navigateTo(url);
-            //driver.Navigate().GoToUrl(url);
-            //Implicit wait
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
             //Explicit wait
             //webElement = waitExplicit.Until<IWebElement>(driver => driver.FindElement(BBCPage.search));
+            enable = waitExplicit.Until(CustomExpectedConditions.IsEnabled(BBCPage.search));
+            Assert.True(enable);
             driver.FindElement(BBCPage.search).Clear();
             driver.FindElement(BBCPage.search).SendKeys(text);
-            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
             driver.FindElement(BBCPage.searchButton).Click();
-            ///driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitImplicit);
             driver.FindElement(BBCPage.firstLink).Click();
         }
     }

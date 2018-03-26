@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
     class BasePage
     {
         protected IWebDriver driver;
+        protected WebDriverWait wait;
+
         public BasePage()
         {
             driver = Driver.Instance.getWebDriver();
         }
+
         public void navigateTo(string url)
         {
             driver.Navigate().GoToUrl(url);

@@ -129,7 +129,15 @@ namespace TestFramework
                     }
                 case BrowserType.IE:
                     {
-                        driver = new InternetExplorerDriver(FullPathDriverLocation);
+                        var service = InternetExplorerDriverService.CreateDefaultService(FullPathDriverLocation);
+                        // properties on the service can be used to e.g. hide the command prompt
+
+                        var options = new InternetExplorerOptions
+                        {
+                            IgnoreZoomLevel = true
+                        };
+
+                        driver = new InternetExplorerDriver(service, options);
                         driver.Manage().Window.Maximize();
                         break;
                     }
@@ -176,5 +184,23 @@ namespace TestFramework
             Firefox,
             IE
         }
+    }
+    public class CustomExpectedConditions
+    {
+        public static Func<IWebDriver, Boolean> IsEnabled(By selector)
+        {
+            Func<IWebDriver, Boolean> myCustomCondition;
+            myCustomCondition = driver =>
+            {
+                IWebElement element = driver.FindElement(selector);
+                if (element.Enabled) 
+                {
+                    return true;
+                }
+                return false;
+            };
+            return myCustomCondition;
+        }
+
     }
 }
