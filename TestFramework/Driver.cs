@@ -201,6 +201,19 @@ namespace TestFramework
             };
             return myCustomCondition;
         }
-
+        public static Func<IWebDriver, Boolean> IsDisplayed(By selector)
+        {
+            Func<IWebDriver, Boolean> myCustomCondition;
+            myCustomCondition = driver =>
+            {
+                IWebElement element = driver.FindElement(selector);
+                if (element.Displayed)
+                {
+                    return true;
+                }
+                return false;
+            };
+            return myCustomCondition;
+        }
     }
 }

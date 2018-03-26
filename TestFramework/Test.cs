@@ -14,6 +14,7 @@ namespace TestFramework
         public IWebDriver driver;
         public IWebElement webElement;
         public static bool enable = false;
+        public static bool display = false;
         public double WAIT_IMPLICIT = 15;
         public WebDriverWait waitExplicit;
 
@@ -58,6 +59,8 @@ namespace TestFramework
             //webElement = waitExplicit.Until<IWebElement>(driver => driver.FindElement(BBCPage.search));
             enable = waitExplicit.Until(CustomExpectedConditions.IsEnabled(BBCPage.search));
             Assert.True(enable);
+            display = waitExplicit.Until(CustomExpectedConditions.IsDisplayed(BBCPage.search));
+            Assert.True(display);
             driver.FindElement(BBCPage.search).Clear();
             driver.FindElement(BBCPage.search).SendKeys(text);
             driver.FindElement(BBCPage.searchButton).Click();
