@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using OpenQA.Selenium.Remote;
+using System.Diagnostics;
 
 namespace TestFramework
 {
@@ -185,35 +184,72 @@ namespace TestFramework
             IE
         }
     }
-    public class CustomExpectedConditions
+
+    public class Waiter
     {
-        public static Func<IWebDriver, Boolean> IsEnabled(By selector)
+        protected IWebDriver driver;
+        public double MAX_WAIT = 15;
+        public double POLLING_INTERVAL = 500;
+
+        public Waiter()
         {
-            Func<IWebDriver, Boolean> myCustomCondition;
-            myCustomCondition = driver =>
-            {
-                IWebElement element = driver.FindElement(selector);
-                if (element.Enabled) 
-                {
-                    return true;
-                }
-                return false;
-            };
-            return myCustomCondition;
+            driver = Driver.Instance.getWebDriver();
         }
-        public static Func<IWebDriver, Boolean> IsDisplayed(By selector)
+
+        Stopwatch watch = new Stopwatch();
+
+        public bool enableElement(By selector)
         {
-            Func<IWebDriver, Boolean> myCustomCondition;
-            myCustomCondition = driver =>
+            try
             {
-                IWebElement element = driver.FindElement(selector);
-                if (element.Displayed)
+                if (watch.Elapsed >= TimeSpan.FromSeconds(MAX_WAIT))
                 {
-                    return true;
+                    watch.Stop();
+                    return false;
                 }
-                return false;
-            };
-            return myCustomCondition;
+                else
+                {
+                    return driver.FindElement(selector).Enabled;
+                }
+            }
+            catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(POLLING_INTERVAL));
+                return enableElement(selector);
+            }
+        }
+
+        public bool isEnabled(By selector)
+        {
+            watch.Start();
+            return enableElement(selector);
+        }
+
+        public bool displayElement(By selector)
+        {
+            try
+            {
+                if (watch.Elapsed >= TimeSpan.FromSeconds(MAX_WAIT))
+                {
+                    watch.Stop();
+                    return false;
+                }
+                else
+                {
+                    return driver.FindElement(selector).Displayed;
+                }
+            }
+            catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(POLLING_INTERVAL));
+                return enableElement(selector);
+            }
+        }
+
+        public bool isDisplayed(By selector)
+        {
+            watch.Start();
+            return displayElement(selector);
         }
     }
 }

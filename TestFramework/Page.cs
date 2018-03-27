@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
+﻿using OpenQA.Selenium;
 
 namespace TestFramework
 {
     class BasePage
     {
         protected IWebDriver driver;
-        protected WebDriverWait wait;
 
         public BasePage()
         {
@@ -19,7 +14,6 @@ namespace TestFramework
         public void navigateTo(string url)
         {
             driver.Navigate().GoToUrl(url);
-            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }
     }
 

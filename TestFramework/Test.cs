@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
-using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -55,12 +52,13 @@ namespace TestFramework
         {
             BBCPage bbc = new BBCPage();
             bbc.navigateTo(url);
-            //Explicit wait
-            //webElement = waitExplicit.Until<IWebElement>(driver => driver.FindElement(BBCPage.search));
-            enable = waitExplicit.Until(CustomExpectedConditions.IsEnabled(BBCPage.search));
-            Assert.True(enable);
-            display = waitExplicit.Until(CustomExpectedConditions.IsDisplayed(BBCPage.search));
-            Assert.True(display);
+
+            //Check isEnabled and isDisplayed Methods
+            //Waiter wait = new Waiter();
+            //Assert.True(wait.isEnabled(By.CssSelector("#search-q")));
+            //Assert.True(wait.isEnabled(BBCPage.search));
+            //Assert.True(wait.isDisplayed(BBCPage.search));
+
             driver.FindElement(BBCPage.search).Clear();
             driver.FindElement(BBCPage.search).SendKeys(text);
             driver.FindElement(BBCPage.searchButton).Click();
