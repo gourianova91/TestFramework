@@ -14,39 +14,28 @@ namespace TestFramework
         public static By moreList = By.CssSelector("div.home-tabs__more");
         public static By checkbox = By.CssSelector("input.checkbox__control");
 
-        public void compareContent(string cityLondon, string cityParis)
+        public void changeGeolocation(string cityName)
         {
-            Waiter wait = new Waiter();
-            driver.FindElement(geolocation).Click();
+            clickOnElement(geolocation);
+            uncheckCheckbox(checkbox);
+            enterText(city, cityName);
+            waitForAutocompleteJquery(cityList, city);
+        }
 
-            driver.FindElement(checkbox).Click();
-            driver.FindElement(city).Clear();
-            driver.FindElement(city).SendKeys(cityLondon);
-            wait.isDisplayed(cityList);
-            driver.FindElement(city).SendKeys(Keys.ArrowDown + Keys.Enter);
+        public string saveContentFromMore()
+        {
+            clickOnElement(more);
+            waitForElementDisplayed(moreList);
+            string moreListContent = getTextFromElement(moreList);
+            clickOnElement(more);
+            waitForElementDisplayed(more);
+            return moreListContent;
+        }
 
-            wait.isDisplayed(more);
-            driver.FindElement(more).Click();
-            wait.isDisplayed(moreList);
-            string moreListLondon = driver.FindElement(moreList).Text;
-
-            driver.FindElement(more).Click();
-            wait.isDisplayed(moreList);
-            driver.FindElement(geolocation).Click();
-
-            driver.FindElement(city).Clear();
-            driver.FindElement(city).SendKeys(cityParis);
-            wait.isDisplayed(cityList);
-            driver.FindElement(city).SendKeys(Keys.ArrowDown + Keys.Enter);
-
-            wait.isDisplayed(more);
-
-            Assert.AreEqual(cityParis, driver.FindElement(geolocation).Text);
-
-            driver.FindElement(more).Click();
-            string moreListParis = driver.FindElement(moreList).Text;
-
-            Assert.True(moreListLondon.Equals(moreListParis));
-        } 
+        public void cityVerify(string cityParis)
+        {
+            waitForElementDisplayed(more);
+            isEqualElements(cityParis, getTextFromElement(geolocation));
+        }
     }
 }

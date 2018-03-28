@@ -85,8 +85,7 @@ namespace TestFramework
             options.AddArgument("start-maximized");
             return options;
         }
-        
-
+       
         private IWebDriver StartBrowser(BrowserType browser = BrowserType.Chrome)
         {
             IWebDriver driver;
@@ -109,12 +108,10 @@ namespace TestFramework
                     {
                         var service = InternetExplorerDriverService.CreateDefaultService(FullPathDriverLocation);
                         // properties on the service can be used to e.g. hide the command prompt
-
                         var options = new InternetExplorerOptions
                         {
                             IgnoreZoomLevel = true
                         };
-
                         driver = new InternetExplorerDriver(service, options);
                         driver.Manage().Window.Maximize();
                         break;

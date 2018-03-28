@@ -10,6 +10,7 @@ namespace TestFramework
     {
         protected static string url = "http://www.bbc.com/";
         protected static string text = "Sherlock";
+        BBCPage bbc = new BBCPage();
 
         public BBCTest(Driver.BrowserType browser)
         {
@@ -19,7 +20,6 @@ namespace TestFramework
         [Test]
         public void bbcTest()
         {
-            BBCPage bbc = new BBCPage();
             bbc.navigateTo(url);
             bbc.searchText(text);
         }

@@ -10,15 +10,9 @@ namespace TestFramework
 
         public void searchText(string text)
         {
-            //Check isEnabled and isDisplayed Methods
-            //Waiter wait = new Waiter();
-            //Assert.True(wait.isEnabled(By.CssSelector("#search-q")));
-            //Assert.True(wait.isEnabled(BBCPage.search));
-            //Assert.True(wait.isDisplayed(BBCPage.search));
-            driver.FindElement(search).Clear();
-            driver.FindElement(search).SendKeys(text);
-            driver.FindElement(searchButton).Click();
-            driver.FindElement(firstLink).Click();
+            enterText(search, text);
+            clickOnElement(searchButton);
+            clickOnElement(firstLink);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace TestFramework
         protected static string url = "https://yandex.ru/";
         protected static string cityLondon = "Лондон";
         protected static string cityParis = "Париж";
+        YandexPage yandex = new YandexPage();
 
         public YandexTest(Driver.BrowserType browser)
         {
@@ -20,9 +21,13 @@ namespace TestFramework
         [Test]
         public void yandexTest()
         {
-            YandexPage yandex = new YandexPage();
             yandex.navigateTo(url);
-            yandex.compareContent(cityLondon, cityParis);
+            yandex.changeGeolocation(cityLondon);
+            string MoreLondon = yandex.saveContentFromMore();
+            yandex.changeGeolocation(cityParis);
+            yandex.cityVerify(cityParis);
+            string MoreParis = yandex.saveContentFromMore();
+            Assert.AreEqual(MoreLondon, MoreParis);
         }
     }
 }
