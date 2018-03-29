@@ -1,9 +1,8 @@
 ﻿using OpenQA.Selenium.Support.Events;
-using System.Threading;
 
 namespace TestFramework
 {
-    class Events : Waiter
+    class Events
     {
         public void startEvents(EventFiringWebDriver eventHandler)
         {

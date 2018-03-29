@@ -76,8 +76,11 @@ namespace TestFramework
                     break;
                 }
             }
-
-            return currentWebDriver;
+            EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
+            Events events = new Events();
+            events.startEvents(eventDriver);
+            return eventDriver;
+            //return currentWebDriver;
         }
 
         protected ChromeOptions ChromeBrowserOptions()
@@ -131,10 +134,6 @@ namespace TestFramework
                         break;
                     }
             }
-            //EventFiringWebDriver eventDriver = new EventFiringWebDriver(driver);
-            //Events events = new Events();
-            //events.startEvents(eventDriver);
-            //return eventDriver;
             return driver;
         }
 
