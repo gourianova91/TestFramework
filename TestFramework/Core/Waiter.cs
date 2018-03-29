@@ -2,14 +2,16 @@
 using System.Diagnostics;
 using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
     public class Waiter
     {
         protected IWebDriver driver;
-        public double MAX_WAIT = 15;
-        public double POLLING_INTERVAL = 500;
+        public double MAX_WAIT = 15;          //Max wait time in seconds for element
+        public double POLLING_INTERVAL = 500; //Polling interval in milliseconds for element
+        public int TIME_OUT = 30;             //Timeout for ajax wait in seconds
 
         public Waiter()
         {
@@ -17,6 +19,35 @@ namespace TestFramework
         }
 
         Stopwatch watch = new Stopwatch();
+
+        public void waitForAjaxToComplete()
+        {
+            try
+            {
+                while (watch.Elapsed.TotalSeconds < TIME_OUT)
+                {
+                    var ajaxIsComplete = (bool)(driver as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0");
+                    if (ajaxIsComplete)
+                    {
+                        break;
+                    }
+
+                }
+            }
+            //Exception Handling
+            catch (Exception ex)
+            {
+                watch.Stop();
+                throw ex;
+            }
+            watch.Stop();
+        }
+
+        public void waitForDocument()
+        {
+            IWait<IWebDriver> wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30.00));
+            wait.Until(driver1 => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+        }
 
         public bool enableElement(By selector)
         {

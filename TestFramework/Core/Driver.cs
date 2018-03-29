@@ -6,12 +6,13 @@ using OpenQA.Selenium.IE;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support.Events;
 
 namespace TestFramework
 {
     public class Driver
     {
-        private static int MAX_WEB_DRIVERS = 3;  // Max web drivers to run in parallel.
+        private static int MAX_WEB_DRIVERS = 2;  // Max web drivers to run in parallel.
         private static int WAIT_FREE_WEB_DRIVER_COUNT = 1000;  // Each thread will sleep this time for creating a new instance of web driver.
         private readonly Dictionary<int, IWebDriver> webDrivers = new Dictionary<int, IWebDriver>();  // Key = thread ID. Value = web driver instance.
 
@@ -82,7 +83,15 @@ namespace TestFramework
         protected ChromeOptions ChromeBrowserOptions()
         {
             ChromeOptions options = new ChromeOptions();
+            options.AddExcludedArgument("ignore-certifcate-errors");
+            options.AddArgument("test-type");
+            options.AddArgument("disable-infobars");
             options.AddArgument("start-maximized");
+            options.AddArgument("enable-automation");
+            options.AddArgument("--js-flags=--expose-gc");
+            options.AddArgument("--enable-precise-memory-info");
+            options.AddArgument("--disable-popup-blocking");
+            options.AddArgument("--disable-default-apps");
             return options;
         }
        
@@ -122,6 +131,10 @@ namespace TestFramework
                         break;
                     }
             }
+            //EventFiringWebDriver eventDriver = new EventFiringWebDriver(driver);
+            //Events events = new Events();
+            //events.startEvents(eventDriver);
+            //return eventDriver;
             return driver;
         }
 

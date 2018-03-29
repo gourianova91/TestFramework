@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace TestFramework
 {
@@ -18,9 +19,22 @@ namespace TestFramework
             driver.Navigate().GoToUrl(url);
         }
 
+        public void moveToElement(By selector)
+        {
+            var elem = driver.FindElement(selector);
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", elem);
+        }
+
+        public void isClickable(By selector)
+        {
+            moveToElement(selector);
+            waitForElementDisplayed(selector);
+            waitForElementEnabled(selector);
+        }
+
         public void clickOnElement(By selector)
         {
-            waitForElementDisplayed(selector);
+            isClickable(selector);
             driver.FindElement(selector).Click();
         }
 
@@ -42,6 +56,11 @@ namespace TestFramework
             wait.isDisplayed(selector);
         }
 
+        public void waitForElementEnabled(By selector)
+        {
+            wait.isEnabled(selector);
+        }
+
         public string getTextFromElement(By selector)
         {
             return driver.FindElement(selector).Text;
@@ -56,16 +75,57 @@ namespace TestFramework
         {
             if (driver.FindElement(selector).Selected)
             {
-                driver.FindElement(selector).Click();
+                IWebElement element = driver.FindElement(selector);
+                Actions action = new Actions(driver);
+                action.MoveToElement(element).Click().Perform();
             }
         }
 
         public void checkCheckbox(By selector)
         {
-            if (!driver.FindElement(selector).Selected)
+            if (driver.FindElement(selector).Selected == false)
             {
-                driver.FindElement(selector).Click();
+                IWebElement element = driver.FindElement(selector);
+                Actions action = new Actions(driver);
+                action.MoveToElement(element).Click().Perform(); 
             }
         }
+
+        public void waitForAjax()
+        {
+            wait.waitForAjaxToComplete();
+        }
+
+        public void waitForDocumentReady()
+        {
+            wait.waitForDocument();
+        }
+
+        public void selectRadioButton(By selector)
+        {
+            if (!driver.FindElement(selector).Selected)
+            {
+                IWebElement element = driver.FindElement(selector);
+                Actions action = new Actions(driver);
+                action.MoveToElement(element).Click().Perform();
+            }
+        }
+
+        public void scrollPageDown()
+        {
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,750)", "");
+        }
+
+        public void selectFromList(By selectorForList, By selectorForListItem)
+        {
+            IWebElement list = driver.FindElement(selectorForList);
+            IWebElement itemOfList = driver.FindElement(selectorForListItem);
+            Actions action = new Actions(driver);
+            action.MoveToElement(list).Click().Perform();
+            waitForElementDisplayed(selectorForListItem);
+            action.MoveToElement(itemOfList).Click().Perform();
+            //driver.FindElement(selectorForList).FindElement(selectorForListItem).Click();
+        }
+
     }
 }
