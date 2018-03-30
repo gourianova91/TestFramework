@@ -7,9 +7,11 @@ namespace TestFramework
     {
         public static By deliveryPrice = By.Id("delivery-included-filter");
         public static By regionModal = By.CssSelector("div.n-region-notification__actions.layout.layout_display_flex > div:nth-child(1) > span");
-        public static By rateStore = By.Id("qrfrom_4");
+        public static By rateStore = By.CssSelector("input#qrfrom_4");
         public static By countProducts = By.CssSelector("button[role=listbox]");
-        public static By selectCountProducts = By.CssSelector("option[value='12']");
+        public static By selectListCountProducts = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'Показывать по 12')]");
+
+        public static string text = "12";
 
         public void regionSelect()
         {
@@ -40,9 +42,7 @@ namespace TestFramework
 
         public void selectCountProductsOnPage()
         {
-            selectFromList(countProducts, selectCountProducts);
-            waitForDocumentReady();
-            Thread.Sleep(3000);
+            selectFromList(countProducts, selectListCountProducts, text);
         }
     }
 }

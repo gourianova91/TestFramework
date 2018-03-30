@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 
 namespace TestFramework
 {
+    [TestFixture]
     public class BaseTest
     {
         public Driver.BrowserType browser;

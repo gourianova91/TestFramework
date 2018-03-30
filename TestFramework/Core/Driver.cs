@@ -76,11 +76,11 @@ namespace TestFramework
                     break;
                 }
             }
-            EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
-            Events events = new Events();
-            events.startEvents(eventDriver);
-            return eventDriver;
-            //return currentWebDriver;
+           // EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
+           // Events events = new Events();
+           // events.startEvents(eventDriver);
+           // return eventDriver;
+            return currentWebDriver;
         }
 
         protected ChromeOptions ChromeBrowserOptions()

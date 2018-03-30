@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
@@ -108,6 +109,7 @@ namespace TestFramework
                 IWebElement element = driver.FindElement(selector);
                 Actions action = new Actions(driver);
                 action.MoveToElement(element).Click().Perform();
+                //driver.FindElement(selector).Click();
             }
         }
 
@@ -116,15 +118,14 @@ namespace TestFramework
             ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,750)", "");
         }
 
-        public void selectFromList(By selectorForList, By selectorForListItem)
+        public void selectFromList(By selectorListButton, By selectorList, string text)
         {
-            IWebElement list = driver.FindElement(selectorForList);
-            IWebElement itemOfList = driver.FindElement(selectorForListItem);
-            Actions action = new Actions(driver);
-            action.MoveToElement(list).Click().Perform();
-            waitForElementDisplayed(selectorForListItem);
-            action.MoveToElement(itemOfList).Click().Perform();
-            //driver.FindElement(selectorForList).FindElement(selectorForListItem).Click();
+            wait.waitForAjaxToComplete();
+            driver.FindElement(selectorListButton).Click();
+            waitForElementDisplayed(selectorList);
+            driver.FindElement(selectorList).Click();
+            //SelectElement select = new SelectElement(list);
+            //select.SelectByValue(text);
         }
 
     }

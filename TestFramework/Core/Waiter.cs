@@ -11,7 +11,7 @@ namespace TestFramework
         protected IWebDriver driver;
         public double MAX_WAIT = 15;          //Max wait time in seconds for element
         public double POLLING_INTERVAL = 500; //Polling interval in milliseconds for element
-        public int TIME_OUT = 30;             //Timeout for ajax wait in seconds
+        public int TIME_OUT = 60;             //Timeout for ajax wait in seconds
 
         public Waiter()
         {
@@ -22,25 +22,27 @@ namespace TestFramework
 
         public void waitForAjaxToComplete()
         {
-            try
-            {
-                while (watch.Elapsed.TotalSeconds < TIME_OUT)
-                {
-                    var ajaxIsComplete = (bool)(driver as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0");
-                    if (ajaxIsComplete)
-                    {
-                        break;
-                    }
+            //try
+            //{
+            //    while (watch.Elapsed.TotalSeconds < TIME_OUT)
+            //    {
+            //        var ajaxIsComplete = (bool)(driver as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0");
+            //        if (ajaxIsComplete)
+            //        {
+            //            break;
+            //        }
 
-                }
-            }
-            //Exception Handling
-            catch (Exception ex)
-            {
-                watch.Stop();
-                throw ex;
-            }
-            watch.Stop();
+            //    }
+            //}
+            ////Exception Handling
+            //catch (Exception ex)
+            //{
+            //    watch.Stop();
+            //    throw ex;
+            //}
+            //watch.Stop();
+            IWait<IWebDriver> wait = new WebDriverWait(driver, TimeSpan.FromSeconds(TIME_OUT));
+            wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
         }
 
         public void waitForDocument()
