@@ -21,6 +21,7 @@ namespace TestFramework
         {
             market.navigateTo(url);
             market.regionSelect();
+            market.getSearchTextFromMarket();
             market.checkDeliveryPrice();
             market.viewProductsByList();
             market.scrollPage();

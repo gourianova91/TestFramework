@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System.Threading;
 
 namespace TestFramework
@@ -10,8 +11,10 @@ namespace TestFramework
         public static By rateStore = By.CssSelector("input#qrfrom_4");
         public static By countProducts = By.CssSelector("button[role=listbox]");
         public static By selectListCountProducts = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'Показывать по 12')]");
+        public static By search = By.Id("header-search");
 
-        public static string text = "12";
+        public static string value = "12";
+        public static string text = "Xiaomi Mi Max";
 
         public void regionSelect()
         {
@@ -42,7 +45,12 @@ namespace TestFramework
 
         public void selectCountProductsOnPage()
         {
-            selectFromList(countProducts, selectListCountProducts, text);
+            selectFromList(countProducts, selectListCountProducts, value);
+        }
+
+        public void getSearchTextFromMarket()
+        {
+            Assert.AreEqual(text, getSearchText(search, text));
         }
     }
 }

@@ -118,6 +118,12 @@ namespace TestFramework
             ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,750)", "");
         }
 
+        public string getSearchText(By selector, string text)
+        {
+            enterText(selector, text);
+            return driver.FindElement(selector).GetAttribute("value");
+        }
+
         public void selectFromList(By selectorListButton, By selectorList, string text)
         {
             wait.waitForAjaxToComplete();
