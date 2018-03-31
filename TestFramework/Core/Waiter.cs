@@ -9,6 +9,7 @@ namespace TestFramework
     public class Waiter
     {
         protected IWebDriver driver;
+        private Stopwatch watch = new Stopwatch();
         public double MAX_WAIT = 15;          //Max wait time in seconds for element
         public double POLLING_INTERVAL = 500; //Polling interval in milliseconds for element
         public int TIME_OUT = 60;             //Timeout for ajax wait in seconds
@@ -17,8 +18,6 @@ namespace TestFramework
         {
             driver = Driver.Instance.getWebDriver();
         }
-
-        Stopwatch watch = new Stopwatch();
 
         public void waitForAjaxToComplete()
         {
@@ -95,7 +94,7 @@ namespace TestFramework
             catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
             {
                 Thread.Sleep(TimeSpan.FromMilliseconds(POLLING_INTERVAL));
-                return enableElement(selector);
+                return displayElement(selector);
             }
         }
 

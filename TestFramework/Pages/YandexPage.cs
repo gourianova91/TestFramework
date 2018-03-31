@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
-using System.Collections.Generic;
-using System.Threading;
+﻿using OpenQA.Selenium;
 
 namespace TestFramework
 {

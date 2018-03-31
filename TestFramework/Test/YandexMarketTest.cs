@@ -9,11 +9,11 @@ namespace TestFramework
     class YandexMarketTest : BaseTest
     {
         protected static string url = "https://market.yandex.by/catalog/54726/list?local-offers-first=0&deliveryincluded=0&onstock=1";
-        YandexMarketPage market = new YandexMarketPage();
+        YandexMarketPage market;
 
-        public YandexMarketTest(Driver.BrowserType browser)
+        public YandexMarketTest(Driver.BrowserType browser) : base(browser)
         {
-            this.browser = browser;
+            market = new YandexMarketPage();
         }
 
         [Test]
@@ -21,11 +21,13 @@ namespace TestFramework
         {
             market.navigateTo(url);
             market.regionSelect();
+            market.selectCountProductsOnPage();
+            Driver.Instance.getWebDriver().SwitchTo().Alert().Accept();
             market.getSearchTextFromMarket();
             market.checkDeliveryPrice();
             market.viewProductsByList();
             market.scrollPage();
-            market.selectCountProductsOnPage();
+            // Done :)
         }
     }
 }

@@ -1,18 +1,18 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
-    class BasePage
+    public class BasePage
     {
         protected IWebDriver driver;
-        Waiter wait = new Waiter();
+        private Waiter wait;
 
         public BasePage()
         {
             driver = Driver.Instance.getWebDriver();
+            wait = new Waiter();
         }
 
         public void navigateTo(string url)

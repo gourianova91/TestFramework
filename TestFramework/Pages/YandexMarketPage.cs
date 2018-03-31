@@ -23,6 +23,7 @@ namespace TestFramework
 
         public void checkDeliveryPrice()
         {
+            waitForElementDisplayed(deliveryPrice);
             checkCheckbox(deliveryPrice);
             uncheckCheckbox(deliveryPrice);
             waitForAjax();
@@ -51,6 +52,7 @@ namespace TestFramework
         public void getSearchTextFromMarket()
         {
             Assert.AreEqual(text, getSearchText(search, text));
+            //waitForAjax();
         }
     }
 }

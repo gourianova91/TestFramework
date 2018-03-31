@@ -2,7 +2,7 @@
 
 namespace TestFramework
 {
-    class BBCPage : BasePage
+    public class BBCPage : BasePage
     {
         public static By search = By.CssSelector("#orb-search-q");
         public static By searchButton = By.CssSelector("#orb-search-button");

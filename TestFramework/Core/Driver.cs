@@ -6,17 +6,15 @@ using OpenQA.Selenium.IE;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using OpenQA.Selenium.Support.Events;
 
 namespace TestFramework
 {
     public class Driver
     {
         private static int MAX_WEB_DRIVERS = 2;  // Max web drivers to run in parallel.
-        private static int WAIT_FREE_WEB_DRIVER_COUNT = 1000;  // Each thread will sleep this time for creating a new instance of web driver.
+        private static int GET_WEB_DRIVER_POLL_TIME = 1000;
+        private static int MAX_GET_WEB_DRIVER_RETRIES = 15;
         private readonly Dictionary<int, IWebDriver> webDrivers = new Dictionary<int, IWebDriver>();  // Key = thread ID. Value = web driver instance.
-
-        private static Mutex syncWebDriver = new Mutex();  // To sync `webDrivers` dict.
 
         public static string OutputDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public static string DriverLocation = @"..\..\Debug\drivers";
@@ -25,7 +23,7 @@ namespace TestFramework
         #region Singleton driver realization
 
         private static volatile Driver _driver;
-        private static readonly object ThreadLock = new object();
+        private static object ThreadLock = new object();
 
         private Driver() { }
 
@@ -54,33 +52,38 @@ namespace TestFramework
          */
         public IWebDriver getWebDriver(BrowserType browser = BrowserType.Chrome)
         {
-            IWebDriver currentWebDriver;
-            int currentThreadId = Thread.CurrentThread.GetHashCode();
+            IWebDriver currentWebDriver = null;
+            int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+            int retries = MAX_GET_WEB_DRIVER_RETRIES;
 
-            while (true)  // TODO: Add MAX_RETRIES counter.
+            while (retries-- != 0)
             {
-                syncWebDriver.WaitOne();
-                if (webDrivers.Count >= MAX_WEB_DRIVERS)
-                {  // This part can be removed if --agents=MAX_WEB_DRIVERS is specified for nunit concole runner.
-                    Thread.Sleep(WAIT_FREE_WEB_DRIVER_COUNT);
-                    syncWebDriver.ReleaseMutex();
-                }
-                else
-                {  // Have possibility to create new instance of web driver.
+                lock(ThreadLock)
+                {
                     if (webDrivers.TryGetValue(currentThreadId, out currentWebDriver) == false)
                     {
-                        currentWebDriver = StartBrowser(browser);  
-                        webDrivers[currentThreadId] = currentWebDriver;
-                    }  // Else the web driver exists and will be returned.
-                    syncWebDriver.ReleaseMutex();
-                    break;
+                        if (webDrivers.Count < MAX_WEB_DRIVERS)
+                        {
+                            currentWebDriver = StartBrowser(browser);
+                            webDrivers[currentThreadId] = currentWebDriver;
+                        }
+                    }
                 }
+                
+                if (currentWebDriver != null)
+                {
+                    return currentWebDriver;
+                }
+
+                Thread.Sleep(GET_WEB_DRIVER_POLL_TIME);
             }
-           // EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
-           // Events events = new Events();
-           // events.startEvents(eventDriver);
-           // return eventDriver;
-            return currentWebDriver;
+
+            throw new System.Exception("getWebDriver() timeout");
+           
+            // EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
+            // Events events = new Events();
+            // events.startEvents(eventDriver);
+            // return eventDriver;
         }
 
         protected ChromeOptions ChromeBrowserOptions()

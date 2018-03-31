@@ -10,11 +10,11 @@ namespace TestFramework
     {
         protected static string url = "http://www.bbc.com/";
         protected static string text = "Sherlock";
-        BBCPage bbc = new BBCPage();
+        BBCPage bbc;
 
-        public BBCTest(Driver.BrowserType browser)
+        public BBCTest(Driver.BrowserType browser) : base(browser)
         {
-            this.browser = browser;
+            bbc = new BBCPage();
         }
 
         [Test]

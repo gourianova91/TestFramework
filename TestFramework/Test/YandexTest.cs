@@ -11,11 +11,11 @@ namespace TestFramework
         protected static string url = "https://yandex.ru/";
         protected static string cityLondon = "Лондон";
         protected static string cityParis = "Париж";
-        YandexPage yandex = new YandexPage();
+        YandexPage yandex;
 
-        public YandexTest(Driver.BrowserType browser)
+        public YandexTest(Driver.BrowserType browser) : base(browser)
         {
-            this.browser = browser;
+            yandex = new YandexPage();
         }
 
         [Test]

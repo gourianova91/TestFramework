@@ -1,22 +1,21 @@
 ﻿using NUnit.Framework;
-using OpenQA.Selenium;
 
 namespace TestFramework
 {
-    [TestFixture]
     public class BaseTest
     {
-        public Driver.BrowserType browser;
+        protected Driver.BrowserType browser;
 
-        [SetUp]
-        public void startTest()
+        public BaseTest(Driver.BrowserType browser)
         {
+            this.browser = browser;
             Driver.Instance.getWebDriver(browser);
         }
 
         [TearDown]
         public void endTest()
         {
+            System.Threading.Thread.Sleep(3000);
             Driver.Instance.stopBrowser();
         }
     }
