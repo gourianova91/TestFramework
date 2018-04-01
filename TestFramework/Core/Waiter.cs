@@ -10,9 +10,9 @@ namespace TestFramework
     {
         protected IWebDriver driver;
         private Stopwatch watch = new Stopwatch();
-        public double MAX_WAIT = 15;          //Max wait time in seconds for element
-        public double POLLING_INTERVAL = 500; //Polling interval in milliseconds for element
-        public int TIME_OUT = 60;             //Timeout for ajax wait in seconds
+        public double MAX_WAIT = 15;                //Max wait time in seconds for element
+        public double POLLING_INTERVAL = 500;       //Polling interval in milliseconds for element
+        public int TIME_OUT = 60;                   //Timeout for ajax wait in seconds
 
         public Waiter()
         {
@@ -21,25 +21,6 @@ namespace TestFramework
 
         public void waitForAjaxToComplete()
         {
-            //try
-            //{
-            //    while (watch.Elapsed.TotalSeconds < TIME_OUT)
-            //    {
-            //        var ajaxIsComplete = (bool)(driver as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0");
-            //        if (ajaxIsComplete)
-            //        {
-            //            break;
-            //        }
-
-            //    }
-            //}
-            ////Exception Handling
-            //catch (Exception ex)
-            //{
-            //    watch.Stop();
-            //    throw ex;
-            //}
-            //watch.Stop();
             IWait<IWebDriver> wait = new WebDriverWait(driver, TimeSpan.FromSeconds(TIME_OUT));
             wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
         }
@@ -61,7 +42,15 @@ namespace TestFramework
                 }
                 else
                 {
-                    return driver.FindElement(selector).Enabled;
+                    if (driver.FindElement(selector).Enabled)
+                    {
+                        watch.Stop();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
@@ -88,7 +77,15 @@ namespace TestFramework
                 }
                 else
                 {
-                    return driver.FindElement(selector).Displayed;
+                    if (driver.FindElement(selector).Displayed)
+                    {
+                        watch.Stop();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)

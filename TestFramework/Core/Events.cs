@@ -6,18 +6,18 @@ namespace TestFramework
     {
         public void startEvents(EventFiringWebDriver eventHandler)
         {
-            eventHandler.Navigated += navigated;
-            eventHandler.Navigating += navigatin;
+            eventHandler.Navigated += Navigated;
+            eventHandler.Navigating += Navigatin;
         }
 
-        private void navigated(object sender, WebDriverNavigationEventArgs e)
+        private void Navigated(object sender, WebDriverNavigationEventArgs e)
         {
-            
+
         }
 
-        private void navigatin(object sender, WebDriverNavigationEventArgs e)
+        private void Navigatin(object sender, WebDriverNavigationEventArgs e)
         {
-            
+
         }
     }
 }

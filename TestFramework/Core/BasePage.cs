@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestFramework
 {
@@ -121,7 +122,9 @@ namespace TestFramework
         public string getSearchText(By selector, string text)
         {
             enterText(selector, text);
-            return driver.FindElement(selector).GetAttribute("value");
+            string value = driver.FindElement(selector).GetAttribute("value");
+            driver.FindElement(selector).Clear();
+            return value;
         }
 
         public void selectFromList(By selectorListButton, By selectorList, string text)
@@ -134,5 +137,19 @@ namespace TestFramework
             //select.SelectByValue(text);
         }
 
+        public bool isAlertPresent()
+        {
+            IAlert alert = CustomExpectedConditions.alertIsPresent().Invoke(driver);
+            return (alert != null);
+        }
+
+        public void checkAlert()
+        {
+            if (isAlertPresent())
+            {
+                System.Threading.Thread.Sleep(1000);
+                Driver.Instance.getWebDriver().SwitchTo().Alert().Accept();
+            }
+        }
     }
 }

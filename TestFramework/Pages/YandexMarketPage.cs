@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
-using System.Threading;
 
 namespace TestFramework
 {
@@ -30,8 +29,9 @@ namespace TestFramework
             waitForDocumentReady();
         }
         
-        public void viewProductsByList()
+        public void viewProductsByHighRate()
         {
+            moveToElement(rateStore);
             selectRadioButton(rateStore);
             waitForAjax();
             waitForDocumentReady();
@@ -52,7 +52,11 @@ namespace TestFramework
         public void getSearchTextFromMarket()
         {
             Assert.AreEqual(text, getSearchText(search, text));
-            //waitForAjax();
+        }
+
+        public void acceptAlertIfPresent()
+        {
+            checkAlert();
         }
     }
 }

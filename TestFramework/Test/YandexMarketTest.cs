@@ -22,12 +22,11 @@ namespace TestFramework
             market.navigateTo(url);
             market.regionSelect();
             market.selectCountProductsOnPage();
-            Driver.Instance.getWebDriver().SwitchTo().Alert().Accept();
+            market.acceptAlertIfPresent();
             market.getSearchTextFromMarket();
             market.checkDeliveryPrice();
-            market.viewProductsByList();
             market.scrollPage();
-            // Done :)
+            market.viewProductsByHighRate();
         }
     }
 }

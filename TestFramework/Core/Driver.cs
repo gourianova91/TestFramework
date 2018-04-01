@@ -6,6 +6,7 @@ using OpenQA.Selenium.IE;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support.Events;
 
 namespace TestFramework
 {
@@ -72,7 +73,12 @@ namespace TestFramework
                 
                 if (currentWebDriver != null)
                 {
-                    return currentWebDriver;
+                     //EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
+                     //Events events = new Events();
+                     //events.startEvents(eventDriver);
+                     //return eventDriver;
+                    
+                     return currentWebDriver;
                 }
 
                 Thread.Sleep(GET_WEB_DRIVER_POLL_TIME);
@@ -80,10 +86,6 @@ namespace TestFramework
 
             throw new System.Exception("getWebDriver() timeout");
            
-            // EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
-            // Events events = new Events();
-            // events.startEvents(eventDriver);
-            // return eventDriver;
         }
 
         protected ChromeOptions ChromeBrowserOptions()
