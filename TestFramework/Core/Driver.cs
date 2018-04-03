@@ -73,12 +73,12 @@ namespace TestFramework
                 
                 if (currentWebDriver != null)
                 {
-                     //EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
-                     //Events events = new Events();
-                     //events.startEvents(eventDriver);
-                     //return eventDriver;
-                    
-                     return currentWebDriver;
+                    //EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
+                    //Events events = new Events();
+                    //events.startEvents(eventDriver);
+                    //return eventDriver;
+
+                    return currentWebDriver;
                 }
 
                 Thread.Sleep(GET_WEB_DRIVER_POLL_TIME);

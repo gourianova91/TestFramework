@@ -25,8 +25,8 @@ namespace TestFramework
             market.acceptAlertIfPresent();
             market.getSearchTextFromMarket();
             market.checkDeliveryPrice();
-            market.scrollPage();
             market.viewProductsByHighRate();
+            market.scrollPage();
         }
     }
 }

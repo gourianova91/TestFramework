@@ -11,6 +11,7 @@ namespace TestFramework
         public static By countProducts = By.CssSelector("button[role=listbox]");
         public static By selectListCountProducts = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'Показывать по 12')]");
         public static By search = By.Id("header-search");
+        public static By scrollTo = By.CssSelector("div.copyright");
 
         public static string value = "12";
         public static string text = "Xiaomi Mi Max";
@@ -39,7 +40,7 @@ namespace TestFramework
 
         public void scrollPage()
         {
-            scrollPageDown();
+            scrollPageDown(scrollTo);
             waitForAjax();
             waitForDocumentReady();
         }
@@ -51,7 +52,7 @@ namespace TestFramework
 
         public void getSearchTextFromMarket()
         {
-            Assert.AreEqual(text, getSearchText(search, text));
+            Assert.AreEqual(text, getAttributeText(search, text));
         }
 
         public void acceptAlertIfPresent()

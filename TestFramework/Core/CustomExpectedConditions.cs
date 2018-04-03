@@ -5,11 +5,11 @@ namespace TestFramework
 {
     public class CustomExpectedConditions
     {
-        protected IWebDriver driver;
+        //protected IWebDriver driver;
 
         public CustomExpectedConditions()
         {
-            driver = Driver.Instance.getWebDriver();
+            //driver = Driver.Instance.getWebDriver();
         }
 
         public static Func<IWebDriver, IAlert> alertIsPresent()

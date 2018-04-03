@@ -4,6 +4,8 @@ namespace TestFramework
 {
     class Events
     {
+        private Waiter wait = new Waiter();
+  
         public void startEvents(EventFiringWebDriver eventHandler)
         {
             eventHandler.Navigated += Navigated;
@@ -12,12 +14,14 @@ namespace TestFramework
 
         private void Navigated(object sender, WebDriverNavigationEventArgs e)
         {
-
+            wait.waitForAjaxToComplete();
+            wait.waitForDocument();
         }
 
         private void Navigatin(object sender, WebDriverNavigationEventArgs e)
         {
-
+            wait.waitForAjaxToComplete();
+            wait.waitForDocument();
         }
     }
 }
