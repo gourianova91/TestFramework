@@ -72,7 +72,9 @@ namespace TestFramework
         [Test, Order(6)]
         public void changeLanguageToEnglish()
         {
-
+            yandex.navigateTo(url);
+            yandex.changeToEng();
+            yandex.verifyChangeLang();
         }
     }
 }

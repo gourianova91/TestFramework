@@ -32,7 +32,9 @@ namespace TestFramework
         public static By moreLang = By.CssSelector("a[aria-label='ещё']");
         public static By langSelectbtn = By.CssSelector(" div.select.option__select.select_size_m.select_theme_normal.i-bem.select_js_inited > button");
         public static By engLang = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'English')]");
-        public static By saveLangbtn = By.XPath("//span[contains(text(), 'Сохранить')]");
+        public static By saveLangbtn = By.CssSelector("button.button.form__save.button_theme_action.button_size_m.i-bem.button_js_inited");
+
+        public static string eng = "Eng";
 
         public void changeGeolocation(string cityName)
         {
@@ -132,6 +134,11 @@ namespace TestFramework
             clickOnElement(saveLangbtn);
             waitForAjax();
             waitForDocumentReady();
+        }
+
+        public void verifyChangeLang()
+        {
+            Assert.AreNotEqual(eng, getTextFromElement(lang));
         }
     }
 }
