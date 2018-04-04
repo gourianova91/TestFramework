@@ -27,5 +27,26 @@ namespace TestFramework
             };
         }
 
+        public static Func<IWebDriver, IWebElement> elementToBeClickable(IWebElement element)
+        { 
+            return (driver) =>
+            {
+                try
+                {
+                    if (/*element != null && */element.Displayed/* && element.Enabled*/)
+                    {
+                        return element;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return null;
+                }
+            };
+        }
     }
 }

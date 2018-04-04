@@ -138,7 +138,7 @@ namespace TestFramework
 
         public void verifyChangeLang()
         {
-            Assert.AreNotEqual(eng, getTextFromElement(lang));
+            Assert.AreEqual(eng, getTextFromElement(lang));
         }
     }
 }

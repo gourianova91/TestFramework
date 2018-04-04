@@ -10,7 +10,7 @@ namespace TestFramework
     {
         //protected IWebDriver driver;
         private Stopwatch watch = new Stopwatch();
-        public double MAX_WAIT = 5;                //Max wait time in seconds for element
+        public double MAX_WAIT = 8;                 //Max wait time in seconds for element
         public double POLLING_INTERVAL = 500;       //Polling interval in milliseconds for element
         public int TIME_OUT = 60;                   //Timeout for ajax wait in seconds
 
@@ -66,7 +66,7 @@ namespace TestFramework
 
         public bool isEnabled(By selector)
         {
-            watch.Start();
+            watch.Restart();
             return enableElement(selector);
         }
 
@@ -101,14 +101,26 @@ namespace TestFramework
 
         public bool isDisplayed(By selector)
         {
-            watch.Start();
+            watch.Restart();
             return displayElement(selector);
         }
+
+        /*public bool isNotDisplayed(By selector)
+        {
+
+        }*/
 
         public void waitForAlert()
         {
             WebDriverWait wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(10.00));
             wait.Until(CustomExpectedConditions.alertIsPresent());
+        }
+
+        public void isClicable(By selector)
+        {
+            IWebElement elem = Driver.Instance.getWebDriver().FindElement(selector);
+            WebDriverWait wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(15.00));
+            wait.Until(CustomExpectedConditions.elementToBeClickable(elem));
         }
     }
 }

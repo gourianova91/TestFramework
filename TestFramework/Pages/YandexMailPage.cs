@@ -33,6 +33,8 @@ namespace TestFramework
 
         public void logoutMail()
         {
+            waitForAjax();
+            waitForDocumentReady();
             clickOnElement(usrloginMail);
             clickOnElement(logoutbtn);
         }
