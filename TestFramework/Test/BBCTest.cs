@@ -1,11 +1,10 @@
-﻿using NUnit.Framework;
+﻿using AventStack.ExtentReports;
+using NUnit.Framework;
 
 namespace TestFramework
 {
     [Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
-    [TestFixture(Driver.BrowserType.Firefox)]
-    //[TestFixture(Driver.BrowserType.IE)]
     public class BBCTest : BaseTest
     {
         protected static string url = "http://www.bbc.com/";

@@ -4,7 +4,7 @@ namespace TestFramework
 {
     [Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
-    [TestFixture(Driver.BrowserType.Firefox)]
+    //[TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     class YandexMarketTest : BaseTest
     {

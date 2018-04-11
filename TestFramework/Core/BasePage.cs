@@ -65,10 +65,10 @@ namespace TestFramework
             return wait.isDisplayed(selector);
         }
 
-        public bool isNotElementDisplayed(By selector)
-        {
-            return wait.isNotDisplayed(selector);
-        }
+        //public bool isNotElementDisplayed(By selector)
+        //{
+        //    return wait.isNotDisplayed(selector);
+        //}
 
         public void waitForElementEnabled(By selector)
         {
