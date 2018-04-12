@@ -1,26 +1,27 @@
-﻿using AventStack.ExtentReports;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using TestFramework.Core;
+using TestFramework.Pages;
 
-namespace TestFramework
+namespace TestFramework.Test
 {
-    [Parallelizable]
+    //[Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
-    public class BBCTest : BaseTest
+    public class BbcTest : BaseTest
     {
-        protected static string url = "http://www.bbc.com/";
-        protected static string text = "Sherlock";
-        BBCPage bbc;
+        private const string Url = "http://www.bbc.com/";
+        private const string Text = "Sherlock";
+        readonly BBCPage _bbc;
 
-        public BBCTest(Driver.BrowserType browser) : base(browser)
+        public BbcTest(Driver.BrowserType browser) : base(browser)
         {
-            bbc = new BBCPage();
+            _bbc = new BBCPage();
         }
 
         [Test]
-        public void bbcTest()
+        public void Bbc()
         {
-            bbc.navigateTo(url);
-            bbc.searchText(text);
+            _bbc.navigateTo(Url);
+            _bbc.SearchText(Text);
         }
     }
 }

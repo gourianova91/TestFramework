@@ -1,12 +1,12 @@
 ﻿using OpenQA.Selenium.Support.Events;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
     class Events
     {
-        private Waiter wait = new Waiter();
+        private readonly Waiter wait = new Waiter();
   
-        public void startEvents(EventFiringWebDriver eventHandler)
+        public void StartEvents(EventFiringWebDriver eventHandler)
         {
             eventHandler.Navigated += Navigated;
             eventHandler.Navigating += Navigatin;
@@ -14,14 +14,14 @@ namespace TestFramework
 
         private void Navigated(object sender, WebDriverNavigationEventArgs e)
         {
-            wait.waitForAjaxToComplete();
-            wait.waitForDocument();
+            wait.WaitForAjaxToComplete();
+            wait.WaitForDocument();
         }
 
         private void Navigatin(object sender, WebDriverNavigationEventArgs e)
         {
-            wait.waitForAjaxToComplete();
-            wait.waitForDocument();
+            wait.WaitForAjaxToComplete();
+            wait.WaitForDocument();
         }
     }
 }

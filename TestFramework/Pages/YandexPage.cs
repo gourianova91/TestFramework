@@ -1,144 +1,145 @@
-﻿using OpenQA.Selenium;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
+using TestFramework.Core;
 
-namespace TestFramework
+namespace TestFramework.Pages
 {
     class YandexPage : BasePage
     {
-        public static By geolocation = By.CssSelector("div.col.headline__item.headline__leftcorner > a");
-        public static By city = By.CssSelector("#city__front-input");
-        public static By cityList = By.CssSelector("ul.popup__items.input__popup-items");
-        public static By more = By.CssSelector("a.home-link.home-link_blue_yes.home-tabs__link.home-tabs__more-switcher");
-        public static By moreList = By.CssSelector("div.home-tabs__more");
-        public static By checkbox = By.CssSelector("input.checkbox__control");
+        private static readonly By Geolocation = By.CssSelector("div.col.headline__item.headline__leftcorner > a");
+        private static readonly By City = By.CssSelector("#city__front-input");
+        private static readonly By CityList = By.CssSelector("ul.popup__items.input__popup-items");
+        private static readonly By More = By.CssSelector("a.home-link.home-link_blue_yes.home-tabs__link.home-tabs__more-switcher");
+        private static readonly By MoreList = By.CssSelector("div.home-tabs__more");
+        private static readonly By Checkbox = By.CssSelector("input.checkbox__control");
 
-        public static By video = By.CssSelector("a[data-id='video']");
-        public static By images = By.CssSelector("a[data-id='images']");
-        public static By news = By.CssSelector("a[data-id='news']");
-        public static By maps = By.CssSelector("a[data-id='maps']");
-        public static By market = By.CssSelector("a[data-id='market']");
-        public static By translate = By.CssSelector("a[data-id='translate']");
-        public static By music = By.CssSelector("a[data-id='music']");
+        private static readonly By Video = By.CssSelector("a[data-id='video']");
+        private static readonly By Images = By.CssSelector("a[data-id='images']");
+        private static readonly By News = By.CssSelector("a[data-id='news']");
+        private static readonly By Maps = By.CssSelector("a[data-id='maps']");
+        private static readonly By Market = By.CssSelector("a[data-id='market']");
+        private static readonly By Translate = By.CssSelector("a[data-id='translate']");
+        private static readonly By Music = By.CssSelector("a[data-id='music']");
 
-        public static string urlVideo = "https://yandex.by/video/";
-        public static string urlImages = "https://yandex.by/images/";
-        public static string urlNews = "https://news.yandex.by/";
-        public static string urlMaps = "https://yandex.by/maps";
-        public static string urlMarket = "https://market.yandex.by/";
-        public static string urlTranslate = "https://translate.yandex.by/";
-        public static string urlMusic = "https://music.yandex.by/";
+        private const string UrlVideo = "https://yandex.by/video/";
+        private const string UrlImages = "https://yandex.by/images/";
+        private const string UrlNews = "https://news.yandex.by/";
+        private const string UrlMaps = "https://yandex.by/maps";
+        private const string UrlMarket = "https://market.yandex.by/";
+        private const string UrlTranslate = "https://translate.yandex.by/";
+        private const string UrlMusic = "https://music.yandex.by/";
 
-        public static By lang = By.CssSelector("span.link__inner > span");
-        public static By moreLang = By.CssSelector("a[aria-label='ещё']");
-        public static By langSelectbtn = By.CssSelector(" div.select.option__select.select_size_m.select_theme_normal.i-bem.select_js_inited > button");
-        public static By engLang = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'English')]");
-        public static By saveLangbtn = By.CssSelector("button.button.form__save.button_theme_action.button_size_m.i-bem.button_js_inited");
+        private static readonly By Lang = By.CssSelector("span.link__inner > span");
+        private static readonly By MoreLang = By.CssSelector("a[aria-label='ещё']");
+        private static readonly By LangSelectbtn = By.CssSelector(" div.select.option__select.select_size_m.select_theme_normal.i-bem.select_js_inited > button");
+        private static readonly By EngLang = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'English')]");
+        private static readonly By SaveLangbtn = By.CssSelector("button.button.form__save.button_theme_action.button_size_m.i-bem.button_js_inited");
 
-        public static string eng = "Eng";
+        private const string Eng = "Eng";
 
-        public void changeGeolocation(string cityName)
+        public void ChangeGeolocation(string cityName)
         {
-            clickOnElement(geolocation);
-            uncheckCheckbox(checkbox);
-            enterText(city, cityName);
-            waitForAutocompleteJquery(cityList, city);
+            ClickOnElement(Geolocation);
+            UncheckCheckbox(Checkbox);
+            EnterText(City, cityName);
+            WaitForAutocompleteJquery(CityList, City);
         }
 
-        public string saveContentFromMore()
+        public string SaveContentFromMore()
         {
-            clickOnElement(more);
-            waitForElementDisplayed(moreList);
-            string moreListContent = getTextFromElement(moreList);
-            clickOnElement(more);
-            waitForElementDisplayed(more);
+            ClickOnElement(More);
+            WaitForElementDisplayed(MoreList);
+            string moreListContent = GetTextFromElement(MoreList);
+            ClickOnElement(More);
+            WaitForElementDisplayed(More);
             return moreListContent;
         }
 
-        public void cityVerify(string cityParis)
+        public void CityVerify(string cityParis)
         {
-            waitForElementDisplayed(more);
-            isEqualElements(cityParis, getTextFromElement(geolocation));
+            WaitForElementDisplayed(More);
+            IsEqualElements(cityParis, GetTextFromElement(Geolocation));
         }
 
-        public void goToVideoAndVerify()
+        public void GoToVideoAndVerify()
         {
-            clickOnElement(video);
-            Assert.IsTrue(getUrl().Contains(urlVideo));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Video);
+            Assert.IsTrue(GetUrl().Contains(UrlVideo));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void goToImagesAndVerify()
+        public void GoToImagesAndVerify()
         {
-            clickOnElement(images);
-            Assert.IsTrue(getUrl().Contains(urlImages));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Images);
+            Assert.IsTrue(GetUrl().Contains(UrlImages));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void goToNewsAndVerify()
+        public void GoToNewsAndVerify()
         {
-            clickOnElement(news);
-            Assert.IsTrue(getUrl().Contains(urlNews));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(News);
+            Assert.IsTrue(GetUrl().Contains(UrlNews));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
         public void goToMapsAndVerify()
         {
-            clickOnElement(maps);
-            Assert.IsTrue(getUrl().Contains(urlMaps));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Maps);
+            Assert.IsTrue(GetUrl().Contains(UrlMaps));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void goToMarketAndVerify()
+        public void GoToMarketAndVerify()
         {
-            clickOnElement(market);
-            Assert.IsTrue(getUrl().Contains(urlMarket));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Market);
+            Assert.IsTrue(GetUrl().Contains(UrlMarket));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void goToTranslateAndVerify()
+        public void GoToTranslateAndVerify()
         {
-            clickOnElement(translate);
-            Assert.IsTrue(getUrl().Contains(urlTranslate));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Translate);
+            Assert.IsTrue(GetUrl().Contains(UrlTranslate));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void goToMusicAndVerify()
+        public void GoToMusicAndVerify()
         {
-            clickOnElement(music);
-            Assert.IsTrue(getUrl().Contains(urlMusic));
-            goBack();
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Music);
+            Assert.IsTrue(GetUrl().Contains(UrlMusic));
+            GoBack();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void changeToEng()
+        public void ChangeToEng()
         {
-            clickOnElement(lang);
-            clickOnElement(moreLang);
-            waitForAjax();
-            waitForDocumentReady();
-            clickOnElement(langSelectbtn);
-            clickOnElement(engLang);
-            clickOnElement(saveLangbtn);
-            waitForAjax();
-            waitForDocumentReady();
+            ClickOnElement(Lang);
+            ClickOnElement(MoreLang);
+            WaitForAjax();
+            WaitForDocumentReady();
+            ClickOnElement(LangSelectbtn);
+            ClickOnElement(EngLang);
+            ClickOnElement(SaveLangbtn);
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void verifyChangeLang()
+        public void VerifyChangeLang()
         {
-            Assert.AreEqual(eng, getTextFromElement(lang));
+            Assert.AreEqual(Eng, GetTextFromElement(Lang));
         }
     }
 }

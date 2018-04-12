@@ -1,33 +1,35 @@
 ﻿using NUnit.Framework;
+using TestFramework.Core;
+using TestFramework.Pages;
 
-namespace TestFramework
+namespace TestFramework.Test
 {
-    [Parallelizable]
+    //[Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
     //[TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     public class YandexGeoTest : BaseTest
     {
-        protected static string url = "https://yandex.ru/";
-        protected static string cityLondon = "Лондон";
-        protected static string cityParis = "Париж";
-        YandexPage yandex;
+        private const string Url = "https://yandex.ru/";
+        private const string CityLondon = "Лондон";
+        private const string CityParis = "Париж";
+        private readonly YandexPage _yandex;
 
         public YandexGeoTest(Driver.BrowserType browser) : base(browser)
         {
-            yandex = new YandexPage();
+            _yandex = new YandexPage();
         }
 
         [Test]
-        public void yandexTest()
+        public void Yandex()
         {
-            yandex.navigateTo(url);
-            yandex.changeGeolocation(cityLondon);
-            string MoreLondon = yandex.saveContentFromMore();
-            yandex.changeGeolocation(cityParis);
-            yandex.cityVerify(cityParis);
-            string MoreParis = yandex.saveContentFromMore();
-            Assert.AreEqual(MoreLondon, MoreParis);
+            _yandex.navigateTo(Url);
+            _yandex.ChangeGeolocation(CityLondon);
+            string moreLondon = _yandex.SaveContentFromMore();
+            _yandex.ChangeGeolocation(CityParis);
+            _yandex.CityVerify(CityParis);
+            string moreParis = _yandex.SaveContentFromMore();
+            Assert.AreEqual(moreLondon, moreParis);
         }
     }
 }

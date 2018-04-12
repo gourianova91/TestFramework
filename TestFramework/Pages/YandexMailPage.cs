@@ -1,57 +1,58 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using TestFramework.Core;
 
-namespace TestFramework
+namespace TestFramework.Pages
 {
     class YandexMailPage : BasePage
     {
-        public static By mail = By.CssSelector("div.desk-notif-card__login-title > a.home-link.home-link_black_yes");
-        public static By login = By.CssSelector("input[name='login']");
-        public static By passwd = By.CssSelector("input[type='password']");
-        public static By loginbtn = By.CssSelector("button[type='submit']");
-        public static By username = By.CssSelector("div.mail-User-Name");
-        public static By logoutbtn = By.CssSelector("a[data-metric='Выход']");
-        public static By usrloginMail = By.CssSelector("div.mail-User-Name");
-        public static By usrloginYandex = By.CssSelector("span.username.desk-notif-card__user-name");
-        public static By errorMsg = By.CssSelector("div.passport-Domik-Form-Error.passport-Domik-Form-Error_active");
+        private static readonly By Mail = By.CssSelector("div.desk-notif-card__login-title > a.home-link.home-link_black_yes");
+        private static readonly By Login = By.CssSelector("input[name='login']");
+        private static readonly By Passwd = By.CssSelector("input[type='password']");
+        private static readonly By Loginbtn = By.CssSelector("button[type='submit']");
+        private static readonly By Username = By.CssSelector("div.mail-User-Name");
+        private static readonly By Logoutbtn = By.CssSelector("a[data-metric='Выход']");
+        private static readonly By UsrloginMail = By.CssSelector("div.mail-User-Name");
+        private static readonly By UsrloginYandex = By.CssSelector("span.username.desk-notif-card__user-name");
+        private static readonly By ErrorMsg = By.CssSelector("div.passport-Domik-Form-Error.passport-Domik-Form-Error_active");
 
-        public static string errMsgPasswd = "Неверный пароль";
-        public static string errMsgLogin = "Такого аккаунта нет";
+        private const string ErrMsgPasswd = "Неверный пароль";
+        private const string ErrMsgLogin = "Такого аккаунта нет";
 
-        public void loginMail(string username, string password)
+        public void LoginMail(string username, string password)
         {
-            clickOnElement(mail);
-            enterText(login, username);
-            enterText(passwd, password);
-            clickOnElement(loginbtn);
+            ClickOnElement(Mail);
+            EnterText(Login, username);
+            EnterText(Passwd, password);
+            ClickOnElement(Loginbtn);
         }
 
-        public void checkUserName(string login)
+        public void CheckUserName(string login)
         {
-            Assert.AreEqual(login, getTextFromElement(username));
+            Assert.AreEqual(login, GetTextFromElement(Username));
         }
 
-        public void logoutMail()
+        public void LogoutMail()
         {
-            waitForAjax();
-            waitForDocumentReady();
-            clickOnElement(usrloginMail);
-            clickOnElement(logoutbtn);
+            WaitForAjax();
+            WaitForDocumentReady();
+            ClickOnElement(UsrloginMail);
+            ClickOnElement(Logoutbtn);
         }
 
-        public void verifylogout()
+        public void Verifylogout()
         {
-            Assert.IsFalse(isElementDisplayed(usrloginYandex));
+            Assert.IsFalse(IsElementDisplayed(UsrloginYandex));
         }
 
-        public void verifyErrorMsgToPasswd()
+        public void VerifyErrorMsgToPasswd()
         {
-            Assert.AreEqual(errMsgPasswd, getTextFromElement(errorMsg));
+            Assert.AreEqual(ErrMsgPasswd, GetTextFromElement(ErrorMsg));
         }
 
-        public void verifyErrorMsgToLogin()
+        public void VerifyErrorMsgToLogin()
         {
-            Assert.AreEqual(errMsgLogin, getTextFromElement(errorMsg));
+            Assert.AreEqual(ErrMsgLogin, GetTextFromElement(ErrorMsg));
         }
     }
 }

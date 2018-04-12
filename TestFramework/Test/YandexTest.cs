@@ -1,80 +1,82 @@
 ﻿using NUnit.Framework;
+using TestFramework.Core;
+using TestFramework.Pages;
 
-namespace TestFramework
+namespace TestFramework.Test
 {
-    [Parallelizable]
+    //[Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
     //[TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     class YandexTest : BaseTest
     {
-        protected static string url = "https://yandex.by/";
-        protected static string username = "AutotestUser";
-        protected static string userpassword = "AutotestUser123";
-        protected static string notValidUserPassword = "NoAutotestUser123";
-        protected static string notValidUserLogin = "NoAutotestUser";
+        private const string Url = "https://yandex.by/";
+        private const string Username = "AutotestUser";
+        private const string Userpassword = "AutotestUser123";
+        private const string NotValidUserPassword = "NoAutotestUser123";
+        private const string NotValidUserLogin = "NoAutotestUser";
 
-        YandexPage yandex;
-        YandexMailPage mail;
+        private readonly YandexPage _yandex;
+        private readonly YandexMailPage _mail;
 
         public YandexTest(Driver.BrowserType browser) : base(browser)
         {
-            yandex = new YandexPage();
-            mail = new YandexMailPage();
+            _yandex = new YandexPage();
+            _mail = new YandexMailPage();
         }
 
         [Test, Order(1)]
-        public void validLogin()
+        public void ValidLogin()
         {
-            mail.navigateTo(url);
-            mail.loginMail(username, userpassword);
-            mail.checkUserName(username);
+            _mail.navigateTo(Url);
+            _mail.LoginMail(Username, Userpassword);
+            _mail.CheckUserName(Username);
         }
 
         [Test, Order(2)]
-        public void logout()
+        public void Logout()
         {
-            mail.navigateTo(url);
-            mail.loginMail(username, userpassword);
-            mail.logoutMail();
-            mail.verifylogout();
+            _mail.navigateTo(Url);
+            _mail.LoginMail(Username, Userpassword);
+            _mail.LogoutMail();
+            _mail.Verifylogout();
         }
 
         [Test, Order(3)]
-        public void noValidLoginPassword()
+        public void NoValidLoginPassword()
         {
-            mail.navigateTo(url);
-            mail.loginMail(username, notValidUserPassword);
-            mail.verifyErrorMsgToPasswd();
+            _mail.navigateTo(Url);
+            _mail.LoginMail(Username, NotValidUserPassword);
+            _mail.VerifyErrorMsgToPasswd();
         }
 
         [Test, Order(4)]
-        public void noValidLoginName()
+        public void NoValidLoginName()
         {
-            mail.navigateTo(url);
-            mail.loginMail(notValidUserLogin, userpassword);
-            mail.verifyErrorMsgToLogin();
+            _mail.navigateTo(Url);
+            _mail.LoginMail(NotValidUserLogin, Userpassword);
+            _mail.VerifyErrorMsgToLogin();
         }
 
         [Test, Order(5)]
-        public void navigation()
+        public void Navigation()
         {
-            yandex.navigateTo(url);
-            yandex.goToVideoAndVerify();
-            yandex.goToImagesAndVerify();
-            yandex.goToNewsAndVerify();
-            yandex.goToMapsAndVerify();
-            yandex.goToMarketAndVerify();
-            yandex.goToTranslateAndVerify();
-            yandex.goToMusicAndVerify();
+            _yandex.navigateTo(Url);
+            _yandex.GoToVideoAndVerify();
+            _yandex.GoToImagesAndVerify();
+            _yandex.GoToNewsAndVerify();
+            _yandex.goToMapsAndVerify();
+            _yandex.GoToMarketAndVerify();
+            _yandex.GoToTranslateAndVerify();
+            _yandex.GoToMusicAndVerify();
         }
 
         [Test, Order(6)]
-        public void changeLanguageToEnglish()
+        public void ChangeLanguageToEnglish()
         {
-            yandex.navigateTo(url);
-            yandex.changeToEng();
-            yandex.verifyChangeLang();
+            _yandex.navigateTo(Url);
+            _yandex.ChangeToEng();
+            _yandex.VerifyChangeLang();
         }
     }
 }

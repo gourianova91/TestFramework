@@ -1,30 +1,29 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using System.IO;
-using System.Reflection;
-using System.Collections.Generic;
-using OpenQA.Selenium.Support.Events;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
     public class Driver
     {
-        private static int MAX_WEB_DRIVERS = 2;  // Max web drivers to run in parallel.
-        private static int GET_WEB_DRIVER_POLL_TIME = 1000;
-        private static int MAX_GET_WEB_DRIVER_RETRIES = 15;
-        private readonly Dictionary<int, IWebDriver> webDrivers = new Dictionary<int, IWebDriver>();  // Key = thread ID. Value = web driver instance.
+        private const int MaxWebDrivers = 2;  // Max web drivers to run in parallel.
+        private const int GetWebDriverPollTime = 1000;
+        private const int MaxGetWebDriverRetries = 15;
+        private readonly Dictionary<int, IWebDriver> _webDrivers = new Dictionary<int, IWebDriver>();  // Key = thread ID. Value = web driver instance.
 
-        public static string OutputDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        public static string DriverLocation = @"..\..\Debug\drivers";
-        public static string FullPathDriverLocation = Path.GetFullPath(Path.Combine(OutputDirectory, DriverLocation));
+        private static readonly string OutputDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string DriverLocation = @"..\..\Debug\drivers";
+        private static readonly string FullPathDriverLocation = Path.GetFullPath(Path.Combine(OutputDirectory, DriverLocation));
 
         #region Singleton driver realization
 
         private static volatile Driver _driver;
-        private static object ThreadLock = new object();
+        private static readonly object ThreadLock = new object();
 
         private Driver() { }
 
@@ -53,20 +52,20 @@ namespace TestFramework
          */
         public IWebDriver getWebDriver(BrowserType browser = BrowserType.Chrome)
         {
-            IWebDriver currentWebDriver = null;
-            int currentThreadId = Thread.CurrentThread.ManagedThreadId;
-            int retries = MAX_GET_WEB_DRIVER_RETRIES;
+            int retries = MaxGetWebDriverRetries;
 
             while (retries-- != 0)
             {
+                IWebDriver currentWebDriver = null;
                 lock(ThreadLock)
                 {
-                    if (webDrivers.TryGetValue(currentThreadId, out currentWebDriver) == false)
+                    int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+                    if (_webDrivers.TryGetValue(currentThreadId, out currentWebDriver) == false)
                     {
-                        if (webDrivers.Count < MAX_WEB_DRIVERS)
+                        if (_webDrivers.Count < MaxWebDrivers)
                         {
                             currentWebDriver = StartBrowser(browser);
-                            webDrivers[currentThreadId] = currentWebDriver;
+                            _webDrivers[currentThreadId] = currentWebDriver;
                         }
                     }
                 }
@@ -75,20 +74,20 @@ namespace TestFramework
                 {
                     //EventFiringWebDriver eventDriver = new EventFiringWebDriver(currentWebDriver);
                     //Events events = new Events();
-                    //events.startEvents(eventDriver);
+                    //events.StartEvents(eventDriver);
                     //return eventDriver;
 
                     return currentWebDriver;
                 }
 
-                Thread.Sleep(GET_WEB_DRIVER_POLL_TIME);
+                Thread.Sleep(GetWebDriverPollTime);
             }
 
             throw new System.Exception("getWebDriver() timeout");
            
         }
 
-        protected ChromeOptions ChromeBrowserOptions()
+        private ChromeOptions ChromeBrowserOptions()
         {
             ChromeOptions options = new ChromeOptions();
             options.AddExcludedArgument("ignore-certifcate-errors");
@@ -121,7 +120,7 @@ namespace TestFramework
                         driver.Manage().Window.Maximize();
                         break;
                     }
-                case BrowserType.IE:
+                case BrowserType.Ie:
                     {
                         var service = InternetExplorerDriverService.CreateDefaultService(FullPathDriverLocation);
                         // properties on the service can be used to e.g. hide the command prompt
@@ -145,15 +144,15 @@ namespace TestFramework
         /*
         * Close web driver for current thread.
         */
-        public void stopBrowser()
+        public void StopBrowser()
         {
             int currentThreadId = Thread.CurrentThread.GetHashCode();
             lock (ThreadLock)
             {
-                if (webDrivers.TryGetValue(currentThreadId, out IWebDriver currentWebDriver) == true)
+                if (_webDrivers.TryGetValue(currentThreadId, out IWebDriver currentWebDriver) == true)
                 {
                     currentWebDriver.Quit();
-                    webDrivers.Remove(currentThreadId);
+                    _webDrivers.Remove(currentThreadId);
                 }
             }
         }
@@ -161,10 +160,9 @@ namespace TestFramework
         ~Driver()
         {
             // Close all web drivers if any.
-            IWebDriver currentWebDriver;
-            foreach (KeyValuePair<int, IWebDriver> entry in webDrivers)
+            foreach (KeyValuePair<int, IWebDriver> entry in _webDrivers)
             {
-                currentWebDriver = entry.Value;
+                var currentWebDriver = entry.Value;
                 currentWebDriver.Quit();
             }
             _driver = null;
@@ -174,7 +172,7 @@ namespace TestFramework
         {
             Chrome,
             Firefox,
-            IE
+            Ie
         }
     }
 }

@@ -2,23 +2,24 @@
 using AventStack.ExtentReports.Reporter;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using static System.String;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
     public class BaseTest
     {
-        protected Driver.BrowserType browser;
-        protected ExtentReports _extent;
-        protected ExtentTest _test;
+        private readonly Driver.BrowserType _browser;
+        private ExtentReports _extent;
+        private ExtentTest _test;
 
         public BaseTest(Driver.BrowserType browser)
         {
-            this.browser = browser;
+            this._browser = browser;
             //Driver.Instance.getWebDriver(browser);
         }
 
         [OneTimeSetUp]
-        protected void Setup()
+        protected void OneTimeSetUp()
         {
             var dir = TestContext.CurrentContext.TestDirectory + "\\";
             var fileName = this.GetType().ToString() + ".html";
@@ -29,21 +30,23 @@ namespace TestFramework
         }
 
         [SetUp]
-        public void startTest()
+        public void SetUp()
         {
-            Driver.Instance.getWebDriver(browser);
+            Driver.Instance.getWebDriver(_browser);
+
             _test = _extent.CreateTest(TestContext.CurrentContext.Test.Name);
         }
 
         [TearDown]
-        public void endTest()
+        public void TearDown()
         {
             System.Threading.Thread.Sleep(1000);
-            Driver.Instance.stopBrowser();
+            Driver.Instance.StopBrowser();
+
             var status = TestContext.CurrentContext.Result.Outcome.Status;
-            var stacktrace = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
+            var stacktrace = IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
                 ? ""
-                : string.Format("{0}", TestContext.CurrentContext.Result.StackTrace);
+                : $"{TestContext.CurrentContext.Result.StackTrace}";
             Status logstatus;
 
             switch (status)
@@ -57,6 +60,12 @@ namespace TestFramework
                 case TestStatus.Skipped:
                     logstatus = Status.Skip;
                     break;
+                case TestStatus.Passed:
+                    logstatus = Status.Pass;
+                    break;
+                case TestStatus.Warning:
+                    logstatus = Status.Warning;
+                    break;
                 default:
                     logstatus = Status.Pass;
                     break;
@@ -67,7 +76,7 @@ namespace TestFramework
         }
 
         [OneTimeTearDown]
-        protected void TearDown()
+        protected void OneTimeTearDown()
         {
             _extent.Flush();
         }

@@ -1,63 +1,64 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using TestFramework.Core;
 
-namespace TestFramework
+namespace TestFramework.Pages
 {
     class YandexMarketPage : BasePage
     {
-        public static By deliveryPrice = By.Id("delivery-included-filter");
-        public static By regionModal = By.CssSelector("div.n-region-notification__actions.layout.layout_display_flex > div:nth-child(1) > span");
-        public static By rateStore = By.CssSelector("input#qrfrom_4");
-        public static By countProducts = By.CssSelector("button[role=listbox]");
-        public static By selectListCountProducts = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'Показывать по 12')]");
-        public static By search = By.Id("header-search");
-        public static By scrollTo = By.CssSelector("div.copyright");
+        private static readonly By DeliveryPrice = By.Id("delivery-included-filter");
+        private static readonly By RegionModal = By.CssSelector("div.n-region-notification__actions.layout.layout_display_flex > div:nth-child(1) > span");
+        private static readonly By RateStore = By.CssSelector("input#qrfrom_4");
+        private static readonly By CountProducts = By.CssSelector("button[role=listbox]");
+        private static readonly By SelectListCountProducts = By.XPath("//div[contains(@class, 'select__item')]/span[contains(text(), 'Показывать по 12')]");
+        private static readonly By Search = By.Id("header-search");
+        private static readonly By ScrollTo = By.CssSelector("div.copyright");
 
-        public static string value = "12";
-        public static string text = "Xiaomi Mi Max";
+        private const string Value = "12";
+        private const string Text = "Xiaomi Mi Max";
 
-        public void regionSelect()
+        public void RegionSelect()
         {
-            clickOnElement(regionModal);
+            ClickOnElement(RegionModal);
         }
 
-        public void checkDeliveryPrice()
+        public void CheckDeliveryPrice()
         {
-            waitForElementDisplayed(deliveryPrice);
-            checkCheckbox(deliveryPrice);
-            uncheckCheckbox(deliveryPrice);
-            waitForAjax();
-            waitForDocumentReady();
+            WaitForElementDisplayed(DeliveryPrice);
+            CheckCheckbox(DeliveryPrice);
+            UncheckCheckbox(DeliveryPrice);
+            WaitForAjax();
+            WaitForDocumentReady();
         }
         
-        public void viewProductsByHighRate()
+        public void ViewProductsByHighRate()
         {
-            moveToElement(rateStore);
-            selectRadioButton(rateStore);
-            waitForAjax();
-            waitForDocumentReady();
+            MoveToElement(RateStore);
+            SelectRadioButton(RateStore);
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void scrollPage()
+        public void ScrollPage()
         {
-            scrollPageDown(scrollTo);
-            waitForAjax();
-            waitForDocumentReady();
+            ScrollPageDown(ScrollTo);
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void selectCountProductsOnPage()
+        public void SelectCountProductsOnPage()
         {
-            selectFromList(countProducts, selectListCountProducts, value);
+            SelectFromList(CountProducts, SelectListCountProducts, Value);
         }
 
-        public void getSearchTextFromMarket()
+        public void GetSearchTextFromMarket()
         {
-            Assert.AreEqual(text, getAttributeText(search, text));
+            Assert.AreEqual(Text, GetAttributeText(Search, Text));
         }
 
-        public void acceptAlertIfPresent()
+        public void AcceptAlertIfPresent()
         {
-            checkAlert();
+            CheckAlert();
         }
     }
 }
