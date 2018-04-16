@@ -4,51 +4,51 @@ using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
     public class Waiter
     {
         //protected IWebDriver driver;
-        private Stopwatch watch = new Stopwatch();
-        public double MAX_WAIT = 8;                 //Max wait time in seconds for element
-        public double POLLING_INTERVAL = 500;       //Polling interval in milliseconds for element
-        public int TIME_OUT = 60;                   //Timeout for ajax wait in seconds
+        private readonly Stopwatch _watch = new Stopwatch();
+        private const double MaxWait = 8; //Max wait time in seconds for element
+        private const double PollingInterval = 500; //Polling interval in milliseconds for element
+        private const int TimeOut = 60; //Timeout for ajax wait in seconds
 
         public Waiter()
         {
             //driver = Driver.Instance.getWebDriver();
         }
 
-        public void waitForAjaxToComplete()
+        public void WaitForAjaxToComplete()
         {
-            bool is_jquery_present = (bool)(Driver.Instance.getWebDriver() as IJavaScriptExecutor).ExecuteScript("return (typeof jQuery != 'undefined');");
-            if (is_jquery_present)
+            bool isJqueryPresent = (bool)(Driver.Instance.getWebDriver() as IJavaScriptExecutor).ExecuteScript("return (typeof jQuery != 'undefined');");
+            if (isJqueryPresent)
             {
-                IWait<IWebDriver> wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(TIME_OUT));
+                IWait<IWebDriver> wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(TimeOut));
                 wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
             }
         }
 
-        public void waitForDocument()
+        public void WaitForDocument()
         {
             IWait<IWebDriver> wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(30.00));
             wait.Until(driver1 => ((IJavaScriptExecutor)Driver.Instance.getWebDriver()).ExecuteScript("return document.readyState").Equals("complete"));
         }
 
-        public bool enableElement(By selector)
+        private bool EnableElement(By selector)
         {
             try
             {
-                if (watch.Elapsed >= TimeSpan.FromSeconds(MAX_WAIT))
+                if (_watch.Elapsed >= TimeSpan.FromSeconds(MaxWait))
                 {
-                    watch.Stop();
+                    _watch.Stop();
                     return false;
                 }
                 else
                 {
                     if (Driver.Instance.getWebDriver().FindElement(selector).Enabled)
                     {
-                        watch.Stop();
+                        _watch.Stop();
                         return true;
                     }
                     else
@@ -59,31 +59,31 @@ namespace TestFramework
             }
             catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(POLLING_INTERVAL));
-                return enableElement(selector);
+                Thread.Sleep(TimeSpan.FromMilliseconds(PollingInterval));
+                return EnableElement(selector);
             }
         }
 
-        public bool isEnabled(By selector)
+        public bool IsEnabled(By selector)
         {
-            watch.Restart();
-            return enableElement(selector);
+            _watch.Restart();
+            return EnableElement(selector);
         }
 
-        public bool displayElement(By selector)
+        private bool DisplayElement(By selector)
         {
             try
             {
-                if (watch.Elapsed >= TimeSpan.FromSeconds(MAX_WAIT))
+                if (_watch.Elapsed >= TimeSpan.FromSeconds(MaxWait))
                 {
-                    watch.Stop();
+                    _watch.Stop();
                     return false;
                 }
                 else
                 {
                     if (Driver.Instance.getWebDriver().FindElement(selector).Displayed)
                     {
-                        watch.Stop();
+                        _watch.Stop();
                         return true;
                     }
                     else
@@ -94,15 +94,15 @@ namespace TestFramework
             }
             catch (Exception e) when (e is NoSuchElementException || e is StaleElementReferenceException)
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(POLLING_INTERVAL));
-                return displayElement(selector);
+                Thread.Sleep(TimeSpan.FromMilliseconds(PollingInterval));
+                return DisplayElement(selector);
             }
         }
 
-        public bool isDisplayed(By selector)
+        public bool IsDisplayed(By selector)
         {
-            watch.Restart();
-            return displayElement(selector);
+            _watch.Restart();
+            return DisplayElement(selector);
         }
 
         /*public bool isNotDisplayed(By selector)
@@ -110,17 +110,17 @@ namespace TestFramework
 
         }*/
 
-        public void waitForAlert()
+        public void WaitForAlert()
         {
             WebDriverWait wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(10.00));
-            wait.Until(CustomExpectedConditions.alertIsPresent());
+            wait.Until(CustomExpectedConditions.AlertIsPresent());
         }
 
-        public void isClicable(By selector)
+        public void IsClicable(By selector)
         {
             IWebElement elem = Driver.Instance.getWebDriver().FindElement(selector);
             WebDriverWait wait = new WebDriverWait(Driver.Instance.getWebDriver(), TimeSpan.FromSeconds(15.00));
-            wait.Until(CustomExpectedConditions.elementToBeClickable(elem));
+            wait.Until(CustomExpectedConditions.ElementToBeClickable(elem));
         }
     }
 }

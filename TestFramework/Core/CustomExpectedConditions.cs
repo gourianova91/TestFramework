@@ -1,18 +1,11 @@
 ﻿using System;
 using OpenQA.Selenium;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
-    public class CustomExpectedConditions
+    public static class CustomExpectedConditions
     {
-        //protected IWebDriver driver;
-
-        public CustomExpectedConditions()
-        {
-            //driver = Driver.Instance.getWebDriver();
-        }
-
-        public static Func<IWebDriver, IAlert> alertIsPresent()
+        public static Func<IWebDriver, IAlert> AlertIsPresent()
         {
             return (driver) =>
             {
@@ -27,7 +20,7 @@ namespace TestFramework
             };
         }
 
-        public static Func<IWebDriver, IWebElement> elementToBeClickable(IWebElement element)
+        public static Func<IWebDriver, IWebElement> ElementToBeClickable(IWebElement element)
         { 
             return (driver) =>
             {

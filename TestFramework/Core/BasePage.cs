@@ -1,16 +1,15 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 
-namespace TestFramework
+namespace TestFramework.Core
 {
     public class BasePage
     {
         //protected IWebDriver driver;
         private Waiter wait;
 
-        public BasePage()
+        protected BasePage()
         {
             //driver = Driver.Instance.getWebDriver();
             wait = new Waiter();
@@ -19,50 +18,50 @@ namespace TestFramework
         public void navigateTo(string url)
         {
             Driver.Instance.getWebDriver().Navigate().GoToUrl(url);
-            waitForAjax();
-            waitForDocumentReady();
+            WaitForAjax();
+            WaitForDocumentReady();
         }
 
-        public void moveToElement(By selector)
+        protected void MoveToElement(By selector)
         {
             var elem = Driver.Instance.getWebDriver().FindElement(selector);
             ((IJavaScriptExecutor)Driver.Instance.getWebDriver()).ExecuteScript("arguments[0].scrollIntoView(true);", elem);
         }
 
-        public void isClickable(By selector)
+        private void IsClickable(By selector)
         {
-            waitForElementDisplayed(selector);
-            waitForElementEnabled(selector);
-            moveToElement(selector);
+            WaitForElementDisplayed(selector);
+            WaitForElementEnabled(selector);
+            MoveToElement(selector);
         }
 
-        public void clickOnElement(By selector)
+        protected void ClickOnElement(By selector)
         {
-            isClickable(selector);
+            IsClickable(selector);
             Driver.Instance.getWebDriver().FindElement(selector).Click();
         }
 
-        public void enterText(By selector, string text)
+        protected void EnterText(By selector, string text)
         {
-            waitForElementDisplayed(selector);
+            WaitForElementDisplayed(selector);
             Driver.Instance.getWebDriver().FindElement(selector).Clear();
             Driver.Instance.getWebDriver().FindElement(selector).SendKeys(text);
         }
 
-        public void waitForAutocompleteJquery(By selectorAutocompleteList, By selectorInput)
+        protected void WaitForAutocompleteJquery(By selectorAutocompleteList, By selectorInput)
         {
-            wait.isDisplayed(selectorAutocompleteList);
+            wait.IsDisplayed(selectorAutocompleteList);
             Driver.Instance.getWebDriver().FindElement(selectorInput).SendKeys(Keys.ArrowDown + Keys.Enter);
         }
 
-        public void waitForElementDisplayed(By selector)
+        protected void WaitForElementDisplayed(By selector)
         {
-            wait.isDisplayed(selector);
+            wait.IsDisplayed(selector);
         }
 
-        public bool isElementDisplayed(By selector)
+        protected bool IsElementDisplayed(By selector)
         {
-            return wait.isDisplayed(selector);
+            return wait.IsDisplayed(selector);
         }
 
         //public bool isNotElementDisplayed(By selector)
@@ -70,28 +69,28 @@ namespace TestFramework
         //    return wait.isNotDisplayed(selector);
         //}
 
-        public void waitForElementEnabled(By selector)
+        private void WaitForElementEnabled(By selector)
         {
-            wait.isEnabled(selector);
+            wait.IsEnabled(selector);
         }
 
-        public void waitForElementClicable(By selector)
+        public void WaitForElementClicable(By selector)
         {
-            wait.isClicable(selector);
+            wait.IsClicable(selector);
         }
 
-        public string getTextFromElement(By selector)
+        protected string GetTextFromElement(By selector)
         {
-            waitForElementDisplayed(selector);
+            WaitForElementDisplayed(selector);
             return Driver.Instance.getWebDriver().FindElement(selector).Text;
         }
 
-        public void isEqualElements(string firstTextElement, string secondTextElement)
+        protected void IsEqualElements(string firstTextElement, string secondTextElement)
         {
             Assert.AreEqual(firstTextElement, secondTextElement);
         }
 
-        public void uncheckCheckbox(By selector)
+        protected void UncheckCheckbox(By selector)
         {
             if (Driver.Instance.getWebDriver().FindElement(selector).Selected)
             {
@@ -102,7 +101,7 @@ namespace TestFramework
             }
         }
 
-        public void checkCheckbox(By selector)
+        protected void CheckCheckbox(By selector)
         {
             if (Driver.Instance.getWebDriver().FindElement(selector).Selected == false)
             {
@@ -113,17 +112,17 @@ namespace TestFramework
             }
         }
 
-        public void waitForAjax()
+        protected void WaitForAjax()
         {
-            wait.waitForAjaxToComplete();
+            wait.WaitForAjaxToComplete();
         }
 
-        public void waitForDocumentReady()
+        protected void WaitForDocumentReady()
         {
-            wait.waitForDocument();
+            wait.WaitForDocument();
         }
 
-        public void selectRadioButton(By selector)
+        protected void SelectRadioButton(By selector)
         {
             if (!Driver.Instance.getWebDriver().FindElement(selector).Selected)
             {
@@ -134,55 +133,55 @@ namespace TestFramework
             }
         }
 
-        public void scrollPageDown(By selector)
+        protected void ScrollPageDown(By selector)
         {
             //((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,750)", "");
-            moveToElement(selector);
+            MoveToElement(selector);
             IWebElement element = Driver.Instance.getWebDriver().FindElement(selector);
             Actions action = new Actions(Driver.Instance.getWebDriver());
             action.MoveToElement(element).Perform();
         }
 
-        public string getAttributeText(By selector, string text)
+        protected string GetAttributeText(By selector, string text)
         {
-            enterText(selector, text);
+            EnterText(selector, text);
             string value = Driver.Instance.getWebDriver().FindElement(selector).GetAttribute("value");
             Driver.Instance.getWebDriver().FindElement(selector).Clear();
             return value;
         }
 
-        public void selectFromList(By selectorListButton, By selectorList, string text)
+        protected void SelectFromList(By selectorListButton, By selectorList, string text)
         {
-            wait.waitForAjaxToComplete();
+            wait.WaitForAjaxToComplete();
             Driver.Instance.getWebDriver().FindElement(selectorListButton).Click();
-            waitForElementDisplayed(selectorList);
+            WaitForElementDisplayed(selectorList);
             Driver.Instance.getWebDriver().FindElement(selectorList).Click();
             //SelectElement select = new SelectElement(list);
             //select.SelectByValue(text);
         }
 
-        public bool isAlertPresent()
+        private bool IsAlertPresent()
         {
-            wait.waitForAlert();
-            IAlert alert = CustomExpectedConditions.alertIsPresent().Invoke(Driver.Instance.getWebDriver());
+            wait.WaitForAlert();
+            IAlert alert = CustomExpectedConditions.AlertIsPresent().Invoke(Driver.Instance.getWebDriver());
             return (alert != null);
         }
 
-        public void checkAlert()
+        protected void CheckAlert()
         {
-            if (isAlertPresent())
+            if (IsAlertPresent())
             {
-                wait.waitForAlert();
+                wait.WaitForAlert();
                 Driver.Instance.getWebDriver().SwitchTo().Alert().Accept();
             }
         }
 
-        public string getUrl()
+        protected string GetUrl()
         {
             return Driver.Instance.getWebDriver().Url;
         }
 
-        public void goBack()
+        protected void GoBack()
         {
             Driver.Instance.getWebDriver().Navigate().Back();
         }

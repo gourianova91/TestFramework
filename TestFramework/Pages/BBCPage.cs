@@ -1,18 +1,19 @@
 ﻿using OpenQA.Selenium;
+using TestFramework.Core;
 
-namespace TestFramework
+namespace TestFramework.Pages
 {
     public class BBCPage : BasePage
     {
-        public static By search = By.CssSelector("#orb-search-q");
-        public static By searchButton = By.CssSelector("#orb-search-button");
-        public static By firstLink = By.CssSelector("#search-content > ol.editors-choice.results > li > article > div > h1 > a");
+        private static readonly By Search = By.CssSelector("#orb-search-q");
+        private static readonly By SearchButton = By.CssSelector("#orb-search-button");
+        private static readonly By FirstLink = By.CssSelector("#search-content > ol.editors-choice.results > li > article > div > h1 > a");
 
-        public void searchText(string text)
+        public void SearchText(string text)
         {
-            enterText(search, text);
-            clickOnElement(searchButton);
-            clickOnElement(firstLink);
+            EnterText(Search, text);
+            ClickOnElement(SearchButton);
+            ClickOnElement(FirstLink);
         }
     }
 }

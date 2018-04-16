@@ -1,32 +1,34 @@
 ﻿using NUnit.Framework;
+using TestFramework.Core;
+using TestFramework.Pages;
 
-namespace TestFramework
+namespace TestFramework.Test
 {
-    [Parallelizable]
+    //[Parallelizable]
     [TestFixture(Driver.BrowserType.Chrome)]
     //[TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     class YandexMarketTest : BaseTest
     {
-        protected static string url = "https://market.yandex.by/catalog/54726/list?local-offers-first=0&deliveryincluded=0&onstock=1";
-        YandexMarketPage market;
+        private static string url = "https://market.yandex.by/catalog/54726/list?local-offers-first=0&deliveryincluded=0&onstock=1";
+        private readonly YandexMarketPage _market;
 
         public YandexMarketTest(Driver.BrowserType browser) : base(browser)
         {
-            market = new YandexMarketPage();
+            _market = new YandexMarketPage();
         }
 
         [Test]
-        public void yandexMarketTest()
+        public void YandexMarket()
         {
-            market.navigateTo(url);
-            market.regionSelect();
-            market.selectCountProductsOnPage();
-            market.acceptAlertIfPresent();
-            market.getSearchTextFromMarket();
-            market.checkDeliveryPrice();
-            market.viewProductsByHighRate();
-            market.scrollPage();
+            _market.navigateTo(url);
+            _market.RegionSelect();
+            _market.SelectCountProductsOnPage();
+            _market.AcceptAlertIfPresent();
+            _market.GetSearchTextFromMarket();
+            _market.CheckDeliveryPrice();
+            _market.ViewProductsByHighRate();
+            _market.ScrollPage();
         }
     }
 }
