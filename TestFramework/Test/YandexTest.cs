@@ -4,9 +4,9 @@ using TestFramework.Pages;
 
 namespace TestFramework.Test
 {
-    //[Parallelizable]
+    [TestFixture, Parallelizable(ParallelScope.Fixtures)]
     [TestFixture(Driver.BrowserType.Chrome)]
-    //[TestFixture(Driver.BrowserType.Firefox)]
+    [TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     class YandexTest : BaseTest
     {
@@ -31,8 +31,10 @@ namespace TestFramework.Test
             _mail.navigateTo(Url);
             _mail.LoginMail(Username, Userpassword);
             _mail.CheckUserName(Username);
+            //Postcondition
+            _mail.LogoutMail();
         }
-
+                
         [Test, Order(2)]
         public void Logout()
         {

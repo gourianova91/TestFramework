@@ -141,5 +141,21 @@ namespace TestFramework.Pages
         {
             Assert.AreEqual(Eng, GetTextFromElement(Lang));
         }
+
+        public void GoToYandexMarket()
+        {
+            ClickOnElement(Market);
+            Assert.IsTrue(GetUrl().Contains(UrlMarket));
+            WaitForAjax();
+            WaitForDocumentReady();
+        }
+
+        public void GoToYandexMusic()
+        {
+            ClickOnElement(Music);
+            Assert.IsTrue(GetUrl().Contains(UrlMusic));
+            WaitForAjax();
+            WaitForDocumentReady();
+        }
     }
 }

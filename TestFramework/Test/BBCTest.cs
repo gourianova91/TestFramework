@@ -4,8 +4,9 @@ using TestFramework.Pages;
 
 namespace TestFramework.Test
 {
-    //[Parallelizable]
+    [TestFixture, Parallelizable(ParallelScope.Fixtures)]
     [TestFixture(Driver.BrowserType.Chrome)]
+    [TestFixture(Driver.BrowserType.Firefox)]
     public class BbcTest : BaseTest
     {
         private const string Url = "http://www.bbc.com/";

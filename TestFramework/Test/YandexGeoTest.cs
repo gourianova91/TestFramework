@@ -4,9 +4,9 @@ using TestFramework.Pages;
 
 namespace TestFramework.Test
 {
-    //[Parallelizable]
+    [TestFixture, Parallelizable(ParallelScope.Fixtures)]
     [TestFixture(Driver.BrowserType.Chrome)]
-    //[TestFixture(Driver.BrowserType.Firefox)]
+    [TestFixture(Driver.BrowserType.Firefox)]
     //[TestFixture(Driver.BrowserType.IE)]
     public class YandexGeoTest : BaseTest
     {

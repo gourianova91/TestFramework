@@ -15,6 +15,7 @@ namespace TestFramework.Pages
         private static readonly By UsrloginMail = By.CssSelector("div.mail-User-Name");
         private static readonly By UsrloginYandex = By.CssSelector("span.username.desk-notif-card__user-name");
         private static readonly By ErrorMsg = By.CssSelector("div.passport-Domik-Form-Error.passport-Domik-Form-Error_active");
+        private static readonly By ForeignComputer = By.CssSelector("input.passport-Checkbox-Controller");
 
         private const string ErrMsgPasswd = "Неверный пароль";
         private const string ErrMsgLogin = "Такого аккаунта нет";
@@ -24,6 +25,7 @@ namespace TestFramework.Pages
             ClickOnElement(Mail);
             EnterText(Login, username);
             EnterText(Passwd, password);
+            CheckCheckbox(ForeignComputer);
             ClickOnElement(Loginbtn);
         }
 
