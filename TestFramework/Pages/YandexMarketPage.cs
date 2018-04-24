@@ -33,8 +33,6 @@ namespace TestFramework.Pages
         private const string Value = "12";
         private const string Text = "Xiaomi Mi Max";
 
-        private const string Mobile = "Note 8";
-
         public void RegionSelect()
         {
             ClickOnElement(RegionModal);
@@ -79,9 +77,9 @@ namespace TestFramework.Pages
             CheckAlert();
         }
 
-        public void SearchForProduct()
+        public void SearchForProduct(string mobile)
         {
-            EnterTextAndClickEnter(Search, Mobile);
+            EnterTextAndClickEnter(Search, mobile);
         }
 
         public string AddProductToComparaison(int product)
@@ -105,6 +103,7 @@ namespace TestFramework.Pages
         public void CloseComparaisonPopup()
         {
             ClickOnElement(ClosingComparaisonPopup);
+            System.Threading.Thread.Sleep(3000);
         }
 
         public void DeleteComparaisonList()

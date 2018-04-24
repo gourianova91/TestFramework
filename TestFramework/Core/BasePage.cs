@@ -26,7 +26,7 @@ namespace TestFramework.Core
 
         protected void MoveToElement(By selector)
         {
-            var elem = driver.FindElement(selector);
+            var elem =  driver.FindElement(selector);
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", elem);
         }
 
@@ -250,6 +250,12 @@ namespace TestFramework.Core
             ClickOnElement(selector, number);
         }
 
+        protected void ClickOnHoverElement(By selector)
+        {
+            HoverElement(selector);
+            ClickOnElement(selector);
+        }
+
         protected IList<string> GetElements(By selector)
         {
             IList<IWebElement> elements = driver.FindElements(selector);
@@ -267,6 +273,11 @@ namespace TestFramework.Core
                 }
             }
             return isEquality;
+        }
+
+        protected void RefreshPage()
+        {
+            driver.Navigate().Refresh();
         }
     }
 }
